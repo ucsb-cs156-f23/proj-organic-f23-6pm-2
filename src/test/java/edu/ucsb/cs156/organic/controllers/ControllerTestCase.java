@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import edu.ucsb.cs156.organic.models.CurrentUser;
 import edu.ucsb.cs156.organic.services.CurrentUserService;
 import edu.ucsb.cs156.organic.services.GrantedAuthoritiesService;
 import edu.ucsb.cs156.organic.testconfig.TestConfig;
