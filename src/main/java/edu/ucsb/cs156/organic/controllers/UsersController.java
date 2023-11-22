@@ -42,24 +42,24 @@ public class UsersController extends ApiController {
     @Operation(summary = "Toggle the admin field")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/toggleAdmin")
-    public Object toggleAdmin( @Parameter(name = "githubId", description = "Integer, GitHub id number of user to toggle their admin field", example = "1", required = true) @RequestParam Integer githubId){
+    public Object toggleAdmin( @Parameter(name = "githubId", description = "Integer, githubId number of user to toggle their admin field", example = "1", required = true) @RequestParam Integer githubId){
         User user = userRepository.findByGithubId(githubId)
         .orElseThrow(() -> new EntityNotFoundException(User.class, githubId));
 
         user.setAdmin(!user.isAdmin());
         userRepository.save(user);
-        return genericMessage("User with id %s has toggled admin status to %s".formatted(githubId, user.isAdmin()));
+        return genericMessage("User with githubId %s has toggled admin status to %s".formatted(githubId, user.isAdmin()));
     }
 
     @Operation(summary = "Toggle the instructor field")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/toggleInstructor")
-    public Object toggleInstructor( @Parameter(name = "githubId", description = "Integer, GitHub id number of user to toggle their instructor field", example = "1", required = true) @RequestParam Integer githubId){
+    public Object toggleInstructor( @Parameter(name = "githubId", description = "Integer, githubId number of user to toggle their instructor field", example = "1", required = true) @RequestParam Integer githubId){
         User user = userRepository.findByGithubId(githubId)
         .orElseThrow(() -> new EntityNotFoundException(User.class, githubId));
 
         user.setInstructor(!user.isInstructor());
         userRepository.save(user);
-        return genericMessage("User with id %s has toggled instructor status to %s".formatted(githubId, user.isInstructor()));
+        return genericMessage("User with githubId %s has toggled instructor status to %s".formatted(githubId, user.isInstructor()));
     }
 }
