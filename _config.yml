@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-f23/proj-organic-f23-6pm-2
 owner: ucsb-cs156-f23
 repo_name: proj-organic-f23-6pm-2
-pull_requests: [{"author":{"id":"MDQ6VXNlcjU5Mzc5NDY0","is_bot":false,"login":"justinchung712","name":""},"headRefName":"userManagement-backend-toggle","number":15,"title":"Create backend endpoints to toggle admin and instructor","url":"https://github.com/ucsb-cs156-f23/proj-organic-f23-6pm-2/pull/15"}]
+pull_requests: [{"author":{"id":"U_kgDOBdHvcw","is_bot":false,"login":"vedantshah99","name":"Vedant Shah"},"headRefName":"vedant-B1-courseController","number":16,"title":"Completed B1: Backend POST / GET operations, Course Controller","url":"https://github.com/ucsb-cs156-f23/proj-organic-f23-6pm-2/pull/16"},{"author":{"id":"MDQ6VXNlcjU5Mzc5NDY0","is_bot":false,"login":"justinchung712","name":""},"headRefName":"userManagement-backend-toggle","number":15,"title":"Create backend endpoints to toggle admin and instructor","url":"https://github.com/ucsb-cs156-f23/proj-organic-f23-6pm-2/pull/15"}]
