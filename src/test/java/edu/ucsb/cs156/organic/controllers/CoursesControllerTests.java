@@ -324,4 +324,70 @@ public class CoursesControllerTests extends ControllerTestCase {
                 assertEquals(expectedMap, responseMap);
         }
 
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
+        public void an_admin_user_can_get_course_for_existing_id() throws Exception {
+                // arrange
+
+                when(courseRepository.findById(eq(course1.getId()))).thenReturn(Optional.of(course1));
+                // act
+
+                MvcResult response = mockMvc.perform(
+                                get("/api/courses/get?courseId=1")
+                                                .with(csrf()))
+                                .andExpect(status().isOk()).andReturn();
+
+                // assert
+
+                verify(courseRepository, times(1)).findById(eq(course1.getId()));
+                String expectedJson = mapper.writeValueAsString(course1);
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(expectedJson, responseString);
+
+        }
+
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
+        public void an_admin_user_cannot_get_course_for_a_non_existing_id() throws Exception {
+                // arrange
+
+                when(courseRepository.findById(eq(42L))).thenReturn(Optional.empty());
+                // act
+
+                MvcResult response = mockMvc.perform(
+                                get("/api/courses/get?courseId=42")
+                                                .with(csrf()))
+                                .andExpect(status().isNotFound()).andReturn();
+
+                // assert
+
+                Map<String,String> responseMap = mapper.readValue(response.getResponse().getContentAsString(), new TypeReference<Map<String,String>>(){});
+                Map<String,String> expectedMap = Map.of("message", "Course with id 42 not found", "type", "EntityNotFoundException");
+                assertEquals(expectedMap, responseMap);
+
+        }
+
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
+        public void a_user_cannot_get_course_if_not_on_course_staff() throws Exception {
+                // arrange
+
+                when(courseRepository.findById(eq(course1.getId()))).thenReturn(Optional.of(course1));
+                when(courseRepository.findCoursesStaffedByUser(any())).thenReturn(new ArrayList<>());
+                // act
+
+                MvcResult response = mockMvc.perform(
+                                get("/api/courses/get?courseId=1")
+                                                .with(csrf()))
+                                .andExpect(status().isForbidden()).andReturn();
+
+                // assert
+
+                Map<String,String> responseMap = mapper.readValue(response.getResponse().getContentAsString(), new TypeReference<Map<String,String>>(){});
+                Map<String,String> expectedMap = Map.of("message", "User not authorized to access this resource", "type", "ForbiddenException");
+                assertEquals(expectedMap, responseMap);
+                
+        }
+
+
 }

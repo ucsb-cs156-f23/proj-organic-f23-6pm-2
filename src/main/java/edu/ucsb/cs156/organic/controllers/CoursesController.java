@@ -132,4 +132,33 @@ public class CoursesController extends ApiController {
         return courseStaff;
     }
 
+    //  There is a GET endpoint /api/course/get?id=123 that gets the course with id 123 if you are an admin, or if you are logged in and on the course staff.
+    @Operation(summary = "Get Course by ID")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @GetMapping("/get")
+    public Course get(
+            @Parameter(name = "courseId") @RequestParam Long courseId)
+            throws JsonProcessingException {
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new EntityNotFoundException(Course.class, courseId.toString()));
+        
+        User u = getCurrentUser().getUser();
+
+        // return course if user is admin
+        if (u.isAdmin()) {
+            return course;
+
+        // if not admin, check if user is in course staff
+        } else {
+                Iterable<Staff> courseStaff = courseStaffRepository.findByCourseId(course.getId());
+                for (Staff staff : courseStaff) {
+                    if (staff.getGithubId().equals(u.getGithubId())) {
+                        return course;
+                    }
+                }
+                throw new EntityNotFoundException(Course.class, courseId.toString());
+        }
+    }
+
 }
