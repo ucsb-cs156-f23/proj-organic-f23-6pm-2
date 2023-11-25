@@ -84,7 +84,7 @@ public class UsersControllerTests extends ControllerTestCase {
           .build();
 
     
-          when(userRepository.findByGithubId(eq(15))).thenReturn(Optional.of(userBefore));
+          when(userRepository.findByGithubId(15)).thenReturn(Optional.of(userBefore));
           when(userRepository.save(eq(userAfter))).thenReturn(userAfter);
           // act
           MvcResult response = mockMvc.perform(
@@ -117,7 +117,7 @@ public class UsersControllerTests extends ControllerTestCase {
           .build();
 
     
-          when(userRepository.findByGithubId(eq(15))).thenReturn(Optional.of(userBefore));
+          when(userRepository.findByGithubId(15)).thenReturn(Optional.of(userBefore));
           when(userRepository.save(eq(userAfter))).thenReturn(userAfter);
           // act
           MvcResult response = mockMvc.perform(
@@ -139,7 +139,7 @@ public class UsersControllerTests extends ControllerTestCase {
           // arrange
         
     
-          when(userRepository.findByGithubId(eq(15))).thenReturn(Optional.empty());
+          when(userRepository.findByGithubId(15)).thenReturn(Optional.empty());
           
           // act
           MvcResult response = mockMvc.perform(
@@ -173,7 +173,7 @@ public class UsersControllerTests extends ControllerTestCase {
           .instructor(true)
           .build();
     
-          when(userRepository.findByGithubId(eq(15))).thenReturn(Optional.of(userBefore));
+          when(userRepository.findByGithubId(15)).thenReturn(Optional.of(userBefore));
           when(userRepository.save(eq(userAfter))).thenReturn(userAfter);
           // act
           MvcResult response = mockMvc.perform(
@@ -206,7 +206,7 @@ public class UsersControllerTests extends ControllerTestCase {
           .build();
 
     
-          when(userRepository.findByGithubId(eq(15))).thenReturn(Optional.of(userBefore));
+          when(userRepository.findByGithubId(15)).thenReturn(Optional.of(userBefore));
           when(userRepository.save(eq(userAfter))).thenReturn(userAfter);
           // act
           MvcResult response = mockMvc.perform(
@@ -229,7 +229,7 @@ public class UsersControllerTests extends ControllerTestCase {
           // arrange
         
     
-          when(userRepository.findByGithubId(eq(15))).thenReturn(Optional.empty());
+          when(userRepository.findByGithubId(15)).thenReturn(Optional.empty());
           
           // act
           MvcResult response = mockMvc.perform(
