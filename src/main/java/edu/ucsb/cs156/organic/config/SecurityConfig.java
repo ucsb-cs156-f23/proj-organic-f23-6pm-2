@@ -94,6 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           if (userIsAdmin) {
             mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
           }
+          
           boolean userIsInstructor=updateInstructor(githubLogin);
           if (userIsInstructor){
             mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_INSTRUCTOR"));
@@ -120,16 +121,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   public boolean updateInstructor(String githubLogin) {
-    if (adminGithubLogins.contains(githubLogin)) {
-      return true;
-    }
     Optional<User> u = userRepository.findByGithubLogin(githubLogin);
-    boolean result = u.isPresent() && u.get().isInstructor();
-    if (result) {
-      User user = u.get();
-      user.setInstructor(true);
-      userRepository.save(user);
-    }
-    return result;
+    return u.isPresent() && u.get().isInstructor();
   }
 }
