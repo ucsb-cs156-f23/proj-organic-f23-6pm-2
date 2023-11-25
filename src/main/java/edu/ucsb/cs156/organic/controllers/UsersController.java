@@ -48,7 +48,7 @@ public class UsersController extends ApiController {
 
         user.setAdmin(!user.isAdmin());
         userRepository.save(user);
-        return genericMessage("User with githubId %s has toggled admin status to %s".formatted(githubId, user.isAdmin()));
+        return genericMessage("User with id %s has toggled admin status to %s".formatted(githubId, user.isAdmin()));
     }
 
     @Operation(summary = "Toggle the instructor field")
@@ -60,6 +60,6 @@ public class UsersController extends ApiController {
 
         user.setInstructor(!user.isInstructor());
         userRepository.save(user);
-        return genericMessage("User with githubId %s has toggled instructor status to %s".formatted(githubId, user.isInstructor()));
+        return genericMessage("User with id %s has toggled instructor status to %s".formatted(githubId, user.isInstructor()));
     }
 }

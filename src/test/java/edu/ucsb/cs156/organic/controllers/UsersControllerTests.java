@@ -97,7 +97,7 @@ public class UsersControllerTests extends ControllerTestCase {
           verify(userRepository, times(1)).save(userAfter);
 
           Map<String, Object> json = responseToJson(response);
-          assertEquals("User with githubId 15 has toggled admin status to true", json.get("message"));
+          assertEquals("User with id 15 has toggled admin status to true", json.get("message"));
   }
 
   @WithMockUser(roles = { "ADMIN", "USER" })
@@ -130,7 +130,7 @@ public class UsersControllerTests extends ControllerTestCase {
           verify(userRepository, times(1)).save(userAfter);
 
           Map<String, Object> json = responseToJson(response);
-          assertEquals("User with githubId 15 has toggled admin status to false", json.get("message"));
+          assertEquals("User with id 15 has toggled admin status to false", json.get("message"));
   }
 
   @WithMockUser(roles = { "ADMIN", "USER" })
@@ -152,7 +152,7 @@ public class UsersControllerTests extends ControllerTestCase {
          
 
           Map<String, Object> json = responseToJson(response);
-          assertEquals("User with githubId 15 not found", json.get("message"));
+          assertEquals("User with id 15 not found", json.get("message"));
   }
 
   // instructor toggle tests
@@ -186,7 +186,7 @@ public class UsersControllerTests extends ControllerTestCase {
           verify(userRepository, times(1)).save(userAfter);
 
           Map<String, Object> json = responseToJson(response);
-          assertEquals("User with githubId 15 has toggled instructor status to true", json.get("message"));
+          assertEquals("User with id 15 has toggled instructor status to true", json.get("message"));
   }
 
   @WithMockUser(roles = { "ADMIN", "USER" })
@@ -219,7 +219,7 @@ public class UsersControllerTests extends ControllerTestCase {
           verify(userRepository, times(1)).save(userAfter);
 
           Map<String, Object> json = responseToJson(response);
-          assertEquals("User with githubId 15 has toggled instructor status to false", json.get("message"));
+          assertEquals("User with id 15 has toggled instructor status to false", json.get("message"));
   }
 
   @WithMockUser(roles = { "ADMIN", "USER" })
@@ -242,6 +242,6 @@ public class UsersControllerTests extends ControllerTestCase {
          
 
           Map<String, Object> json = responseToJson(response);
-          assertEquals("User with githubId 15 not found", json.get("message"));
+          assertEquals("User with id 15 not found", json.get("message"));
   }
 }
