@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -236,9 +238,9 @@ public class CoursesControllerTests extends ControllerTestCase {
         public void an_instructor_user_can_update_a_course() throws Exception {
                 // arrange
 
-                // CurrentUser currentUserMock = mock(CurrentUser.class);
-                // CurrentUserService currentUserServiceMock = mock(CurrentUserService.class);
-                // User userMock = mock(User.class);
+                CurrentUser currentUserMock = spy(CurrentUser.class);
+                CurrentUserService currentUserServiceMock = spy(CurrentUserService.class);
+                User userMock = mock(User.class);
 
                 User user = User.builder()
                         .githubId(12345)
@@ -275,7 +277,9 @@ public class CoursesControllerTests extends ControllerTestCase {
 
                 String requestBody = mapper.writeValueAsString(courseEdited);
 
-                when(currentUserService.getCurrentUser().getUser()).thenReturn(user);
+                // doReturn(currentUserMock).when(currentUserService).getCurrentUser();
+                // doReturn(user).when(currentUserMock).getUser();
+                // when(currentUserServiceMock.getCurrentUser().getUser()).thenReturn(null);
                 when(courseRepository.findById(eq(123L))).thenReturn(Optional.of(courseOrig));
                 when(userRepository.findByGithubLogin(eq("testuser123"))).thenReturn(Optional.of(user));
                 when(courseStaffRepository.existsById(eq(12345))).thenReturn(true);
