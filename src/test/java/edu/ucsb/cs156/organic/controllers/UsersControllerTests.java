@@ -85,7 +85,7 @@ public class UsersControllerTests extends ControllerTestCase {
 
     
           when(userRepository.findByGithubId(15)).thenReturn(Optional.of(userBefore));
-          when(userRepository.save(eq(userAfter))).thenReturn(userAfter);
+          when(userRepository.save(eq(userBefore))).thenReturn(userAfter);
           // act
           MvcResult response = mockMvc.perform(
                           post("/api/admin/users/toggleAdmin?githubId=15")
@@ -94,7 +94,7 @@ public class UsersControllerTests extends ControllerTestCase {
 
           // assert
           verify(userRepository, times(1)).findByGithubId(15);
-          verify(userRepository, times(1)).save(userAfter);
+          verify(userRepository, times(1)).save(userBefore);
 
           Map<String, Object> json = responseToJson(response);
           assertEquals("User with id 15 has toggled admin status to true", json.get("message"));
@@ -118,7 +118,7 @@ public class UsersControllerTests extends ControllerTestCase {
 
     
           when(userRepository.findByGithubId(15)).thenReturn(Optional.of(userBefore));
-          when(userRepository.save(eq(userAfter))).thenReturn(userAfter);
+          when(userRepository.save(eq(userBefore))).thenReturn(userAfter);
           // act
           MvcResult response = mockMvc.perform(
                           post("/api/admin/users/toggleAdmin?githubId=15")
@@ -127,7 +127,7 @@ public class UsersControllerTests extends ControllerTestCase {
 
           // assert
           verify(userRepository, times(1)).findByGithubId(15);
-          verify(userRepository, times(1)).save(userAfter);
+          verify(userRepository, times(1)).save(userBefore);
 
           Map<String, Object> json = responseToJson(response);
           assertEquals("User with id 15 has toggled admin status to false", json.get("message"));
@@ -174,7 +174,7 @@ public class UsersControllerTests extends ControllerTestCase {
           .build();
     
           when(userRepository.findByGithubId(15)).thenReturn(Optional.of(userBefore));
-          when(userRepository.save(eq(userAfter))).thenReturn(userAfter);
+          when(userRepository.save(eq(userBefore))).thenReturn(userAfter);
           // act
           MvcResult response = mockMvc.perform(
                           post("/api/admin/users/toggleInstructor?githubId=15")
@@ -183,7 +183,7 @@ public class UsersControllerTests extends ControllerTestCase {
 
           // assert
           verify(userRepository, times(1)).findByGithubId(15);
-          verify(userRepository, times(1)).save(userAfter);
+          verify(userRepository, times(1)).save(userBefore);
 
           Map<String, Object> json = responseToJson(response);
           assertEquals("User with id 15 has toggled instructor status to true", json.get("message"));
@@ -193,7 +193,7 @@ public class UsersControllerTests extends ControllerTestCase {
   @Test
   public void admin_can_toggle_instructor_status_of_a_user_from_true_to_false() throws Exception {
           // arrange
-          User userBefore = User.builder()
+         User userBefore = User.builder()
           .email("cgaucho@ucsb.edu")
           .githubId(15)
           .instructor(true)
@@ -207,7 +207,7 @@ public class UsersControllerTests extends ControllerTestCase {
 
     
           when(userRepository.findByGithubId(15)).thenReturn(Optional.of(userBefore));
-          when(userRepository.save(eq(userAfter))).thenReturn(userAfter);
+          when(userRepository.save(eq(userBefore))).thenReturn(userAfter);
           // act
           MvcResult response = mockMvc.perform(
                           post("/api/admin/users/toggleInstructor?githubId=15")
@@ -216,7 +216,7 @@ public class UsersControllerTests extends ControllerTestCase {
 
           // assert
           verify(userRepository, times(1)).findByGithubId(15);
-          verify(userRepository, times(1)).save(userAfter);
+          verify(userRepository, times(1)).save(userBefore);
 
           Map<String, Object> json = responseToJson(response);
           assertEquals("User with id 15 has toggled instructor status to false", json.get("message"));
