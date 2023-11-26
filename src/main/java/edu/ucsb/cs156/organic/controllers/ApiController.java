@@ -25,6 +25,15 @@ public abstract class ApiController {
   protected CurrentUser getCurrentUser() {
     return currentUserService.getCurrentUser();
   }
+
+  /**
+   * This creates a plain old java object that can be returned as a JSON response
+   * @return a Map object with a single key/value pair: "message" => message
+   */
+
+  protected Object genericMessage(String message) {
+    return Map.of("message", message);
+  }
   
   @ExceptionHandler({ IllegalArgumentException.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
