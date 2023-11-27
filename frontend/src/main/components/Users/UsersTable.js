@@ -40,11 +40,8 @@ const columns = [
 export default function UsersTable({ users, showToggleButtons = true}) {
     function cellToAxiosParamsToggleAdmin(cell) {
         return {
-            url: "/api/admin/users/toggleAdmin",
+            url: "/api/admin/users/toggleAdmin?githubId=" + cell.row.values.githubId,
             method: "POST",
-            params: {
-                id: cell.row.values.id
-            }
         }
     }
     
@@ -58,11 +55,8 @@ export default function UsersTable({ users, showToggleButtons = true}) {
 
     function cellToAxiosParamsToggleInstructor(cell) {
         return {
-            url: "/api/admin/users/toggleInstructor",
+            url: "/api/admin/users/toggleInstructor?githubId=" + cell.row.values.githubId,
             method: "POST",
-            params: {
-                id: cell.row.values.id
-            }
         }
     }
     
