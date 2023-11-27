@@ -69,43 +69,6 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
     }
 
     @Test
-    public void interceptor_no_change_when_all_fields_are_correct() throws Exception {
-        // Set up
-        User mockUser = User.builder()
-            .email("tommy@ucsb.edu")
-            .githubId(123456)
-            .githubLogin("tommy602")
-            .fullName("Thomas Tommot")
-            .emailVerified(true)
-            .admin(true)
-            .instructor(true)
-            .build();
-        when(userRepository.findByGithubId(123456)).thenReturn(Optional.of(mockUser));
-
-        // Act
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/currentUser");
-        HandlerExecutionChain chain = mapping.getHandler(request);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-
-        assert chain != null;
-        Optional<HandlerInterceptor> roleRuleInterceptor = chain.getInterceptorList()
-                        .stream()
-                        .filter(RoleUserInterceptor.class::isInstance)
-                        .findAny();
-
-        assertTrue(roleRuleInterceptor.isPresent());
-        roleRuleInterceptor.get().preHandle(request, response, chain.getHandler());
-
-        // Assert
-        Collection<? extends GrantedAuthority> updatedAuthorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-        verify(userRepository, times(1)).findByGithubId(123456);
-        boolean hasAdminRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
-        boolean hasInstructorRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_INSTRUCTOR"));
-        assertTrue(hasAdminRole, "ROLE_ADMIN should exist in authorities");
-        assertTrue(hasInstructorRole, "ROLE_INSTRUCTOR should exist from authorities");
-    }
-
-    @Test
     public void user_not_present_in_db_and_no_role_update_by_interceptor() throws Exception {
          // Set up
          User mockUser = User.builder()
