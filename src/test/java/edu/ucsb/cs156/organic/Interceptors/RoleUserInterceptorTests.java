@@ -53,6 +53,8 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
         attributes.put("githubId", 123456);
         attributes.put("email", "tommy@ucsb.edu");
         attributes.put("githubLogin", "tommy602");
+        attributes.put("fullName", "Thomas Tommot");
+        attributes.put("emailVerified", true);
 
         Set<GrantedAuthority> fakeAuthorities = new HashSet<>();
         fakeAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -73,6 +75,8 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
          .email("cgaucho@ucsb.edu")
          .githubId(654321)
          .githubLogin("erica875")
+         .fullName("Erica Ricae")
+         .emailVerified(true)
          .admin(false)
          .instructor(true)
          .build();
@@ -108,6 +112,8 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
             .email("tommy@ucsb.edu")
             .githubId(123456)
             .githubLogin("tommy602")
+            .fullName("Thomas Tommot")
+            .emailVerified(true)
             .admin(false)
             .instructor(true)
             .build();
@@ -137,12 +143,14 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
     }
 
     @Test
-    public void interceptor_removes_driver_role_when_driver_field_in_db_is_false() throws Exception {
+    public void interceptor_removes_instructor_role_when_driver_field_in_db_is_false() throws Exception {
         // Set up
         User mockUser = User.builder()
             .email("tommy@ucsb.edu")
             .githubId(123456)
             .githubLogin("tommy602")
+            .fullName("Thomas Tommot")
+            .emailVerified(true)
             .admin(true)
             .instructor(false)
             .build();
