@@ -7,18 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ucsb.cs156.organic.entities.User;
+import edu.ucsb.cs156.organic.errors.EntityNotFoundException;
 import edu.ucsb.cs156.organic.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 
 @Tag(name = &quot;User information (admin only)&quot;)
 @RequestMapping(&quot;/api/admin/users&quot;)
 @RestController
-<span class="fc" id="L21">public class UsersController extends ApiController {</span>
+<span class="fc" id="L25">public class UsersController extends ApiController {</span>
     @Autowired
     UserRepository userRepository;
 
@@ -30,9 +34,33 @@ import io.swagger.v3.oas.annotations.Operation;
     @GetMapping(&quot;&quot;)
     public ResponseEntity&lt;String&gt; users()
             throws JsonProcessingException {
-<span class="fc" id="L33">        Iterable&lt;User&gt; users = userRepository.findAll();</span>
-<span class="fc" id="L34">        String body = mapper.writeValueAsString(users);</span>
-<span class="fc" id="L35">        return ResponseEntity.ok().body(body);</span>
+<span class="fc" id="L37">        Iterable&lt;User&gt; users = userRepository.findAll();</span>
+<span class="fc" id="L38">        String body = mapper.writeValueAsString(users);</span>
+<span class="fc" id="L39">        return ResponseEntity.ok().body(body);</span>
+    }
+
+    @Operation(summary = &quot;Toggle the admin field&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @PostMapping(&quot;/toggleAdmin&quot;)
+    public Object toggleAdmin( @Parameter(name = &quot;githubId&quot;, description = &quot;Integer, githubId number of user to toggle their admin field&quot;, example = &quot;1&quot;, required = true) @RequestParam Integer githubId){
+<span class="fc" id="L46">        User user = userRepository.findByGithubId(githubId)</span>
+<span class="fc" id="L47">        .orElseThrow(() -&gt; new EntityNotFoundException(User.class, githubId));</span>
+
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        user.setAdmin(!user.isAdmin());</span>
+<span class="fc" id="L50">        userRepository.save(user);</span>
+<span class="fc" id="L51">        return genericMessage(&quot;User with id %s has toggled admin status to %s&quot;.formatted(githubId, user.isAdmin()));</span>
+    }
+
+    @Operation(summary = &quot;Toggle the instructor field&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @PostMapping(&quot;/toggleInstructor&quot;)
+    public Object toggleInstructor( @Parameter(name = &quot;githubId&quot;, description = &quot;Integer, githubId number of user to toggle their instructor field&quot;, example = &quot;1&quot;, required = true) @RequestParam Integer githubId){
+<span class="fc" id="L58">        User user = userRepository.findByGithubId(githubId)</span>
+<span class="fc" id="L59">        .orElseThrow(() -&gt; new EntityNotFoundException(User.class, githubId));</span>
+
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        user.setInstructor(!user.isInstructor());</span>
+<span class="fc" id="L62">        userRepository.save(user);</span>
+<span class="fc" id="L63">        return genericMessage(&quot;User with id %s has toggled instructor status to %s&quot;.formatted(githubId, user.isInstructor()));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
