@@ -48,13 +48,13 @@ public class RoleUserInterceptor implements HandlerInterceptor {
                 User user = optionalUser.get();
 
                 Set<GrantedAuthority> newAuthorities = new HashSet<>();
-                // Collection<? extends GrantedAuthority> currentAuthorities = authentication.getAuthorities();
-                // currentAuthorities.stream()
-                // .filter(authority -> !authority.getAuthority().equals("ROLE_ADMIN")
-                // && !authority.getAuthority().equals("ROLE_INSTRUCTOR"))
-                // .forEach(authority -> {
-                //     newAuthorities.add(authority);
-                // });
+                Collection<? extends GrantedAuthority> currentAuthorities = authentication.getAuthorities();
+                currentAuthorities.stream()
+                .filter(authority -> !authority.getAuthority().equals("ROLE_ADMIN")
+                && !authority.getAuthority().equals("ROLE_INSTRUCTOR"))
+                .forEach(authority -> {
+                    newAuthorities.add(authority);
+                });
 
                 if (user.isAdmin() ){
                     newAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));

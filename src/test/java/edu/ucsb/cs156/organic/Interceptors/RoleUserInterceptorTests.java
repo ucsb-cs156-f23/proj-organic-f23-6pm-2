@@ -59,6 +59,7 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
         Set<GrantedAuthority> fakeAuthorities = new HashSet<>();
         fakeAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         fakeAuthorities.add(new SimpleGrantedAuthority("ROLE_INSTRUCTOR"));
+        fakeAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
         OAuth2User mockUser = new DefaultOAuth2User(fakeAuthorities, attributes, "githubLogin");
         Authentication authentication = new OAuth2AuthenticationToken(mockUser, fakeAuthorities , "mockUserRegisterId");
@@ -101,8 +102,10 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
         verify(userRepository, times(1)).findByGithubId(123456);
         boolean hasAdminRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
         boolean hasInstructorRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_INSTRUCTOR"));
+        boolean hasUSERRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
         assertTrue(hasAdminRole, "ROLE_ADMIN should exist authorities");
         assertTrue(hasInstructorRole, "ROLE_INSTRUCTOR should exist in authorities");
+        assertTrue(hasUSERRole, "ROLE_USER should exist in authorities");
     }
 
     @Test
@@ -138,8 +141,10 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
         verify(userRepository, times(1)).findByGithubId(123456);
         boolean hasAdminRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
         boolean hasInstructorRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_INSTRUCTOR"));
+        boolean hasUSERRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
         assertFalse(hasAdminRole, "ROLE_ADMIN should be removed from authorities");
         assertTrue(hasInstructorRole, "ROLE_INSTRUCTOR should exist in authorities");
+        assertTrue(hasUSERRole, "ROLE_USER should exist in authorities");
     }
 
     @Test
@@ -175,7 +180,9 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
         verify(userRepository, times(1)).findByGithubId(123456);
         boolean hasAdminRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
         boolean hasInstructorRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_INSTRUCTOR"));
+        boolean hasUSERRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
         assertTrue(hasAdminRole, "ROLE_ADMIN should exist in authorities");
         assertFalse(hasInstructorRole, "ROLE_INSTRUCTOR should be removed from authorities");
+        assertTrue(hasUSERRole, "ROLE_USER should exist in authorities");
     }
 }
