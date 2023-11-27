@@ -51,7 +51,8 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
     public void setupSecurityContext(){
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("githubId", 123456);
-        attributes.put("email", "mockOauth@gmail.com");
+        attributes.put("email", "tommy@ucsb.edu");
+        attributes.put("githubLogin", "tommy602");
 
         Set<GrantedAuthority> fakeAuthorities = new HashSet<>();
         fakeAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -72,8 +73,43 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
          .email("cgaucho@ucsb.edu")
          .githubId(654321)
          .admin(false)
+         .instructor(true)
          .build();
         when(userRepository.findByGithubId(654321)).thenReturn(Optional.of(mockUser));
+
+        // Act
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/currentUser");
+        HandlerExecutionChain chain = mapping.getHandler(request);
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        assert chain != null;
+        Optional<HandlerInterceptor> roleRuleInterceptor = chain.getInterceptorList()
+                        .stream()
+                        .filter(RoleUserInterceptor.class::isInstance)
+                        .findAny();
+
+        assertTrue(roleRuleInterceptor.isPresent());
+        roleRuleInterceptor.get().preHandle(request, response, chain.getHandler());
+        
+        // Assert
+        Collection<? extends GrantedAuthority> updatedAuthorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        verify(userRepository, times(1)).findByGithubId(123456);
+        boolean hasAdminRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+        boolean hasInstructorRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_INSTRUCTOR"));
+        assertTrue(hasAdminRole, "ROLE_ADMIN should exist authorities");
+        assertTrue(hasInstructorRole, "ROLE_INSTRUCTOR should exist in authorities");
+    }
+
+    @Test
+    public void interceptor_removes_admin_role_when_admin_field_in_db_is_false() throws Exception {
+        // Set up
+        User mockUser = User.builder()
+            .email("tommy@ucsb.edu")
+            .githubId(123456)
+            .admin(false)
+            .instructor(true)
+            .build();
+        when(userRepository.findByGithubId(123456)).thenReturn(Optional.of(mockUser));
 
         // Act
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/currentUser");
@@ -94,39 +130,6 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
         verify(userRepository, times(1)).findByGithubId(123456);
         boolean hasAdminRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
         boolean hasInstructorRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_INSTRUCTOR"));
-        assertTrue(hasAdminRole, "ROLE_ADMIN should exist authorities");
-        assertTrue(hasInstructorRole, "ROLE_INSTRUCTOR should exist in authorities");
-    }
-
-    @Test
-    public void interceptor_removes_admin_role_when_admin_field_in_db_is_false() throws Exception {
-        // Set up
-        User mockUser = User.builder()
-            .email("cgaucho@ucsb.edu")
-            .githubId(123456)
-            .admin(false)
-            .build();
-        when(userRepository.findByGithubId(123456)).thenReturn(Optional.of(mockUser));
-
-        // Act
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/currentUser");
-        HandlerExecutionChain chain = mapping.getHandler(request);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-
-        assert chain != null;
-        Optional<HandlerInterceptor> roleRuleInterceptor = chain.getInterceptorList()
-                        .stream()
-                        .filter(RoleUserInterceptor.class::isInstance)
-                        .findAny();
-
-        assertTrue(roleRuleInterceptor.isPresent());
-        roleRuleInterceptor.get().preHandle(request, response, chain.getHandler());
-
-        // Assert
-        Collection<? extends GrantedAuthority> updatedAuthorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-        verify(userRepository, times(1)).findByGithubId(123456);
-        boolean hasAdminRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
-        boolean hasInstructorRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_DRIVER"));
         assertFalse(hasAdminRole, "ROLE_ADMIN should be removed from authorities");
         assertTrue(hasInstructorRole, "ROLE_INSTRUCTOR should exist in authorities");
     }
@@ -135,9 +138,10 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
     public void interceptor_removes_driver_role_when_driver_field_in_db_is_false() throws Exception {
         // Set up
         User mockUser = User.builder()
-            .email("cgaucho@ucsb.edu")
+            .email("tommy@ucsb.edu")
             .githubId(123456)
             .admin(true)
+            .instructor(false)
             .build();
         when(userRepository.findByGithubId(123456)).thenReturn(Optional.of(mockUser));
 
@@ -159,7 +163,7 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
         Collection<? extends GrantedAuthority> updatedAuthorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
         verify(userRepository, times(1)).findByGithubId(123456);
         boolean hasAdminRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
-        boolean hasInstructorRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_DRIVER"));
+        boolean hasInstructorRole = updatedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_INSTRUCTOR"));
         assertTrue(hasAdminRole, "ROLE_ADMIN should exist in authorities");
         assertFalse(hasInstructorRole, "ROLE_INSTRUCTOR should be removed from authorities");
     }
