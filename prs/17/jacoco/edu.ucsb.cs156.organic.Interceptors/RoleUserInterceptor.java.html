@@ -48,13 +48,13 @@ import edu.ucsb.cs156.organic.entities.User;
 <span class="fc" id="L48">                User user = optionalUser.get();</span>
 
 <span class="fc" id="L50">                Set&lt;GrantedAuthority&gt; newAuthorities = new HashSet&lt;&gt;();</span>
-                // Collection&lt;? extends GrantedAuthority&gt; currentAuthorities = authentication.getAuthorities();
-                // currentAuthorities.stream()
-                // .filter(authority -&gt; !authority.getAuthority().equals(&quot;ROLE_ADMIN&quot;)
-                // &amp;&amp; !authority.getAuthority().equals(&quot;ROLE_INSTRUCTOR&quot;))
-                // .forEach(authority -&gt; {
-                //     newAuthorities.add(authority);
-                // });
+<span class="fc" id="L51">                Collection&lt;? extends GrantedAuthority&gt; currentAuthorities = authentication.getAuthorities();</span>
+<span class="fc" id="L52">                currentAuthorities.stream()</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">                .filter(authority -&gt; !authority.getAuthority().equals(&quot;ROLE_ADMIN&quot;)</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">                &amp;&amp; !authority.getAuthority().equals(&quot;ROLE_INSTRUCTOR&quot;))</span>
+<span class="fc" id="L55">                .forEach(authority -&gt; {</span>
+<span class="fc" id="L56">                    newAuthorities.add(authority);</span>
+<span class="fc" id="L57">                });</span>
 
 <span class="fc bfc" id="L59" title="All 2 branches covered.">                if (user.isAdmin() ){</span>
 <span class="fc" id="L60">                    newAuthorities.add(new SimpleGrantedAuthority(&quot;ROLE_ADMIN&quot;));</span>
