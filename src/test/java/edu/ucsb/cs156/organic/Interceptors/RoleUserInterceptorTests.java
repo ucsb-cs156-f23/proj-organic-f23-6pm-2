@@ -72,6 +72,7 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
          User mockUser = User.builder()
          .email("cgaucho@ucsb.edu")
          .githubId(654321)
+         .githubLogin("erica875")
          .admin(false)
          .instructor(true)
          .build();
@@ -106,6 +107,7 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
         User mockUser = User.builder()
             .email("tommy@ucsb.edu")
             .githubId(123456)
+            .githubLogin("tommy602")
             .admin(false)
             .instructor(true)
             .build();
@@ -140,6 +142,7 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
         User mockUser = User.builder()
             .email("tommy@ucsb.edu")
             .githubId(123456)
+            .githubLogin("tommy602")
             .admin(true)
             .instructor(false)
             .build();
