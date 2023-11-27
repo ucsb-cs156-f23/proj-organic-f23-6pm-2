@@ -17,8 +17,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +30,8 @@ import edu.ucsb.cs156.organic.errors.EntityNotFoundException;
 
 
 import java.time.LocalDateTime;
+
+import javax.validation.Valid;
 
 @Tag(name = "Courses")
 @RequestMapping("/api/courses")
@@ -89,6 +94,49 @@ public class CoursesController extends ApiController {
         courseStaffRepository.save(courseStaff);
 
         return savedCourse;
+    }
+    
+    @Operation(summary = "Update a course")
+    @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR', 'ROLE_ADMIN', 'ROLE_USER')")
+    @PutMapping("/update")
+    public Object updateCourse(
+            @Parameter(name = "id", description ="id") @RequestParam Long id,
+            @RequestBody @Valid Course incoming) {
+        User user = getCurrentUser().getUser();
+        if(user.isAdmin() || (user.isInstructor() && courseStaffRepository.existsById(user.getGithubId()))) {
+                Course course = courseRepository.findById(id)
+                        .orElseThrow(() -> new EntityNotFoundException(Course.class, id));
+
+                course.setName(incoming.getName());
+                course.setSchool(incoming.getSchool());
+                course.setTerm(incoming.getTerm());
+                course.setStart(incoming.getStart());
+                course.setEnd(incoming.getEnd());
+                course.setGithubOrg(incoming.getGithubOrg());
+
+                courseRepository.save(course);
+
+                return course;
+        } else {
+                return genericMessage("You must be an admin or staff in this course to update the course.");
+        }
+    }
+
+    @Operation(summary = "Delete a course")
+    @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR', 'ROLE_ADMIN', 'ROLE_USER')")
+    @DeleteMapping("/delete")
+    public Object deleteCourse(
+            @Parameter(name = "id", description ="id") @RequestParam Long id) {
+        User user = getCurrentUser().getUser();
+        if(user.isAdmin() || (user.isInstructor() && courseStaffRepository.existsById(user.getGithubId()))) {
+                Course course = courseRepository.findById(id)
+                        .orElseThrow(() -> new EntityNotFoundException(Course.class, id));
+
+                courseRepository.delete(course);
+
+                return genericMessage("Course with id %s deleted.".formatted(id));
+        }
+        return genericMessage("You must be an admin or staff in this course to delete the course.");
     }
 
     @Operation(summary = "Add a staff member to a course")
