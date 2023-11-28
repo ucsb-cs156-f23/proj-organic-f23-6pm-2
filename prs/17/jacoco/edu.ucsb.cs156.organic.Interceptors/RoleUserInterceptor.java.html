@@ -42,7 +42,7 @@ import edu.ucsb.cs156.organic.entities.User;
 
 <span class="fc bfc" id="L43" title="All 2 branches covered.">        if (authentication instanceof OAuth2AuthenticationToken ) {</span>
 <span class="fc" id="L44">            OAuth2User oAuthUser = ((OAuth2AuthenticationToken) authentication).getPrincipal();</span>
-<span class="fc" id="L45">            Integer githubID = oAuthUser.getAttribute(&quot;githubId&quot;);</span>
+<span class="fc" id="L45">            Integer githubID = oAuthUser.getAttribute(&quot;id&quot;);</span>
 <span class="fc" id="L46">            Optional&lt;User&gt; optionalUser = userRepository.findByGithubId(githubID);</span>
 <span class="fc bfc" id="L47" title="All 2 branches covered.">            if (optionalUser.isPresent()){</span>
 <span class="fc" id="L48">                User user = optionalUser.get();</span>
