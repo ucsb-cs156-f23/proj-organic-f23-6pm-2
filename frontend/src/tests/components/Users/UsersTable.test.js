@@ -3,6 +3,7 @@ import UsersTable from "main/components/Users/UsersTable";
 import { formatTime } from "main/utils/dateUtils";
 import usersFixtures from "fixtures/usersFixtures";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { act } from 'react-dom/test-utils';
 
 const mockedNavigate = jest.fn();
 
@@ -125,7 +126,9 @@ describe("UserTable tests", () => {
         // toggle action
         const consoleSpy = jest.spyOn(console, 'log');
 
-        fireEvent.click(toggleAdmin);
+        await act(async () => {
+            fireEvent.click(toggleAdmin);
+        });
         // Check if console.log was called with the expected message
         expect(consoleSpy).toHaveBeenCalledWith("Toggled Admin");
 
@@ -150,7 +153,9 @@ describe("UserTable tests", () => {
         // toggle action
         const consoleSpy = jest.spyOn(console, 'log');
         
-        fireEvent.click(toggleInstructor);
+        await act(async () => {
+            fireEvent.click(toggleInstructor);
+        });
         // Check if console.log was called with the expected message
         expect(consoleSpy).toHaveBeenCalledWith("Toggled Instructor");
 
