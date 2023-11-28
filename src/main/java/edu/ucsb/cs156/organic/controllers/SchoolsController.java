@@ -37,7 +37,7 @@ public class SchoolsController extends ApiController {
     ObjectMapper mapper;
 
     @Operation(summary = "List all schools")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/all")
     public Iterable<School> schools() {
         Iterable<School> schools = schoolRepository.findAll();
@@ -46,7 +46,7 @@ public class SchoolsController extends ApiController {
     }
 
     @Operation(summary = "Get a single school")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("")
     public School getByAbbrev(
         @Parameter(name = "abbrev") @RequestParam String abbrev) {
@@ -58,7 +58,7 @@ public class SchoolsController extends ApiController {
 
     @Operation(summary = "Create a new school")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/update")
+    @PostMapping("/post")
     public School postSchool(
             @Parameter(name = "abbrev", description ="school abbrevation, e.g. ucsb" ) @RequestParam String abbrev,
             @Parameter(name = "name", description ="school name e.g. UC Santa Barbara" ) @RequestParam String name,
