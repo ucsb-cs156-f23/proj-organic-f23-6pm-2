@@ -38,32 +38,41 @@ export default function UsersTable({ users, showToggleButtons = true}) {
         },
     ];
 
+export default function UsersTable({ users, showToggleButtons}) {
+    const POST = "POST"
+    const usr = "/api/admin/users/"
     function cellToAxiosParamsToggleAdmin(cell) {
         return {
-            url: "/api/admin/users/toggleAdmin?githubId=" + cell.row.values.githubId,
-            method: "POST",
+            url: usr + "toggleAdmin",
+            method: POST,
+            params:{
+                githubId: cell.row.values.githubId
+            }
         }
     }
     
     const toggleAdminMutation = useBackendMutation(
         cellToAxiosParamsToggleAdmin,
-        {onSuccess: () => window.location.reload()},
-        ["/api/admin/users"]
+        {onSuccess : console.log("Toggled Admin")},
+        [usr]
     );
     
     const toggleAdminCallback = async (cell) => { toggleAdminMutation.mutate(cell);}
 
     function cellToAxiosParamsToggleInstructor(cell) {
         return {
-            url: "/api/admin/users/toggleInstructor?githubId=" + cell.row.values.githubId,
-            method: "POST",
+            url: usr + "toggleInstructor",
+            method: POST,
+            params: {
+                githubId: cell.row.values.githubId
+            }
         }
     }
     
     const toggleInstructorMutation = useBackendMutation(
         cellToAxiosParamsToggleInstructor,
-        {onSuccess: () => window.location.reload()},
-        ["/api/admin/users"]
+        {onSuccess : console.log("Toggled Instructor")},
+        [usr]
     );
     
     const toggleInstructorCallback = async (cell) => { toggleInstructorMutation.mutate(cell);}
