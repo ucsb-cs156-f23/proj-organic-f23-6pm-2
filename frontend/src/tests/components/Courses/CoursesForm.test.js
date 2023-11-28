@@ -81,6 +81,7 @@ describe("CoursesForm tests", () => {
         const startField = screen.getByTestId("CoursesForm-start");
         const endField = screen.getByTestId("CoursesForm-end");
         const githubOrgField = screen.getByTestId("CoursesForm-githubOrg");
+        const submitButton = screen.getByTestId("CoursesForm-submit");
 
         fireEvent.change(nameField, { target: { value: 'course1' } });
         fireEvent.change(schoolField, { target: { value: 'school1' } });
@@ -186,8 +187,6 @@ describe("CoursesForm tests", () => {
         expect(screen.getByText(/Start Date is required./)).toBeInTheDocument();
         expect(screen.getByText(/End Date is required./)).toBeInTheDocument();
         expect(screen.getByText(/GitHub Org is required./)).toBeInTheDocument();
-
-        fireEvent.click(submitButton);
     });
 
 });

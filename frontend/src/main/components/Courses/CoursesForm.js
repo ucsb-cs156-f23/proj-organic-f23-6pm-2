@@ -100,7 +100,6 @@ function CoursesForm({ initialContents, submitAction, buttonLabel = "Create" }) 
                 />
                 <Form.Control.Feedback type="invalid">
                     {errors.start && 'Start Date is required.'}
-                    {errors.start?.type === 'pattern' && 'start must be in ISO format, e.g. 2022-01-02T15:30'}
                 </Form.Control.Feedback>
             </Form.Group>
 
@@ -115,7 +114,6 @@ function CoursesForm({ initialContents, submitAction, buttonLabel = "Create" }) 
                 />
                 <Form.Control.Feedback type="invalid">
                     {errors.end && 'End Date is required.'}
-                    {errors.end?.type === 'pattern' && 'end must be in ISO format, e.g. 2022-01-02T15:30'}
                 </Form.Control.Feedback>
             </Form.Group>
 
