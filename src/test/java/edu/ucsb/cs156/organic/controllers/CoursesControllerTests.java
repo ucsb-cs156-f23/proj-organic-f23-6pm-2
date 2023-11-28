@@ -31,7 +31,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.checkerframework.checker.units.qual.Current;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -83,6 +82,9 @@ public class CoursesControllerTests extends ControllerTestCase {
 
         @Autowired
         ObjectMapper objectMapper;
+
+        @Autowired
+        CurrentUserService currentUserService;
 
         Course course1 = Course.builder()
                         .id(1L)
@@ -189,7 +191,7 @@ public class CoursesControllerTests extends ControllerTestCase {
                 assertEquals(expectedJson, responseString);
         }
 
-        @WithMockUser(roles = { "ADMIN", "USER" })
+        @WithMockUser(roles = { "ADMIN" })
         @Test
         public void an_admin_user_can_update_a_course() throws Exception {
                 // arrange
@@ -234,7 +236,7 @@ public class CoursesControllerTests extends ControllerTestCase {
                 assertEquals(requestBody, responseString);
         }
 
-        @WithMockUser(roles = { "INSTRUCTOR", "USER" })
+        @WithMockUser(roles = { "USER" })
         @Test
         public void an_instructor_user_can_update_a_course() throws Exception {
                 // arrange
@@ -274,10 +276,10 @@ public class CoursesControllerTests extends ControllerTestCase {
 
                 String requestBody = mapper.writeValueAsString(courseEdited);
 
+                when(currentUserService.getCurrentUser().getUser()).thenReturn(user);
                 when(courseRepository.findById(eq(123L))).thenReturn(Optional.of(courseOrig));
                 when(userRepository.findByGithubLogin(eq("testuser123"))).thenReturn(Optional.of(user));
                 when(courseStaffRepository.existsById(eq(12345))).thenReturn(true);
-                when(currentUserService.getCurrentUser().getUser()).thenReturn(user);
 
 
                 // act
@@ -403,10 +405,14 @@ public class CoursesControllerTests extends ControllerTestCase {
                 assertEquals("Course with id 123 deleted.", json.get("message"));
         }
 
-        @WithMockUser(roles = { "INSTRUCTOR" })
+        @WithMockUser(roles = { "USER" })
         @Test
         public void an_instructor_user_can_delete_a_course() throws Exception {
                 // arrange
+
+                // CurrentUser currentUserMock = mock(CurrentUser.class);
+                // CurrentUserService currentUserServiceMock = mock(CurrentUserService.class);
+                // User userMock = mock(User.class);
 
                 User user = User.builder()
                         .githubId(12345)
@@ -432,6 +438,7 @@ public class CoursesControllerTests extends ControllerTestCase {
                         .build();
 
                 when(currentUserService.getCurrentUser().getUser()).thenReturn(user);
+                when(courseStaffRepository.existsById(eq(12345))).thenReturn(true);
                 when(courseRepository.findById(eq(123L))).thenReturn(Optional.of(course));
 
 
