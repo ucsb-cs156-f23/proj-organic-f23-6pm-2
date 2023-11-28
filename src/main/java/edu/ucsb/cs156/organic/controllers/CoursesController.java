@@ -20,14 +20,22 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ucsb.cs156.organic.errors.EntityNotFoundException;
 
-
+import org.springframework.security.access.AccessDeniedException;
 import java.time.LocalDateTime;
+
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+
+import java.util.Optional;
 
 @Tag(name = "Courses")
 @RequestMapping("/api/courses")
@@ -136,7 +144,7 @@ public class CoursesController extends ApiController {
     //  There is a GET endpoint /api/course/get?id=123 that gets the course with id 123 if you are an admin, or if you are logged in and on the course staff.
     @Operation(summary= "Get a single course by id")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-    @GetMapping("/get")
+    @GetMapping("")
     public Course getById(
             @Parameter(name="id") @RequestParam Long id) {
         User u = getCurrentUser().getUser();
