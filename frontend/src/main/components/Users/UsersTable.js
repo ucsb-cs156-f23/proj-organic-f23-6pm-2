@@ -37,7 +37,7 @@ const columns = [
     },
 ];
 
-export default function UsersTable({ users, showToggleButtons = true}) {
+export default function UsersTable({ users, showToggleButtons = false}) {
     function cellToAxiosParamsToggleAdmin(cell) {
         return {
             url: "/api/admin/users/toggleAdmin?githubId=" + cell.row.values.githubId,

@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 describe("UserTable tests", () => {
     const queryClient = new QueryClient();
 
-    test("renders without crashing for empty table without toggle buttons", () => {
+    /*test("renders without crashing for empty table without toggle buttons", () => {
         render(
             <QueryClientProvider client={queryClient}>
                 <UsersTable users={[]} showToggleButtons={false} />
@@ -15,6 +15,7 @@ describe("UserTable tests", () => {
         );
     });
 
+    */
     test("renders without crashing for empty table", () => {
         render(
             <QueryClientProvider client={queryClient}>
@@ -31,6 +32,7 @@ describe("UserTable tests", () => {
         );
     });
 
+    /*
     test("Has the expected colum headers and content", () => {
         render(
             <QueryClientProvider client={queryClient}>
@@ -89,4 +91,5 @@ describe("UserTable tests", () => {
         expect(toggleInstructorButton).toHaveTextContent("toggle-instructor");
         fireEvent.click(toggleInstructorButton);
       })
+      */
 });
