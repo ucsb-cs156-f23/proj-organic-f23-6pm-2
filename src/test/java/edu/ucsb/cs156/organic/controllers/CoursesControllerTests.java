@@ -233,23 +233,23 @@ public class CoursesControllerTests extends ControllerTestCase {
                 assertEquals(requestBody, responseString);
         }
 
-        @WithMockUser(roles = { "INSTRUCTOR" })
+        @WithMockUser(roles = { "INSTRUCTOR", "USER" })
         @Test
         public void an_instructor_user_can_update_a_course() throws Exception {
                 // arrange
 
-                // User user = User.builder()
-                //         .githubId(12345)
-                //         .githubNodeId("abc")
-                //         .githubLogin("testuser123")
-                //         .email("testuser@gmail.com")
-                //         .pictureUrl("pic")
-                //         .fullName("test user")
-                //         .emailVerified(true)
-                //         .admin(false)
-                //         .instructor(true)
-                //         .accessToken("access")
-                //         .build();
+                User user = User.builder()
+                        .githubId(12345)
+                        .githubNodeId("abc")
+                        .githubLogin("testuser123")
+                        .email("testuser@gmail.com")
+                        .pictureUrl("pic")
+                        .fullName("test user")
+                        .emailVerified(true)
+                        .admin(false)
+                        .instructor(true)
+                        .accessToken("access")
+                        .build();
 
                 Course courseOrig = Course.builder()
                                 .id(123L)
@@ -272,13 +272,8 @@ public class CoursesControllerTests extends ControllerTestCase {
                                 .build();
 
                 String requestBody = mapper.writeValueAsString(courseEdited);
-                CurrentUser currentUser = currentUserService.getCurrentUser();
-                User user1 = currentUser.getUser();
-                user1.setInstructor(true);
 
                 when(courseRepository.findById(eq(123L))).thenReturn(Optional.of(courseOrig));
-                when(user1.isInstructor()).thenReturn(true);
-                // when(userRepository.findByGithubLogin(eq("testuser123"))).thenReturn(Optional.of(user));
                 when(courseStaffRepository.existsById(eq(12345))).thenReturn(true);
 
 
@@ -405,23 +400,23 @@ public class CoursesControllerTests extends ControllerTestCase {
                 assertEquals("Course with id 123 deleted.", json.get("message"));
         }
 
-        @WithMockUser(roles = { "INSTRUCTOR" })
+        @WithMockUser(roles = { "USER" })
         @Test
         public void an_instructor_user_can_delete_a_course() throws Exception {
                 // arrange
 
-                // User user = User.builder()
-                //         .githubId(12345)
-                //         .githubNodeId("abc")
-                //         .githubLogin("testuser123")
-                //         .email("testuser@gmail.com")
-                //         .pictureUrl("pic")
-                //         .fullName("test user")
-                //         .emailVerified(true)
-                //         .admin(false)
-                //         .instructor(true)
-                //         .accessToken("access")
-                //         .build();
+                User user = User.builder()
+                        .githubId(12345)
+                        .githubNodeId("abc")
+                        .githubLogin("testuser123")
+                        .email("testuser@gmail.com")
+                        .pictureUrl("pic")
+                        .fullName("test user")
+                        .emailVerified(true)
+                        .admin(false)
+                        .instructor(true)
+                        .accessToken("access")
+                        .build();
                 
                 Course course = Course.builder()
                         .id(123L)
@@ -434,13 +429,7 @@ public class CoursesControllerTests extends ControllerTestCase {
                         .build();
                 
                 // when(currentUserService.getCurrentUser().getUser()).thenReturn(user);
-                CurrentUser currentUser = currentUserService.getCurrentUser();
-                User user1 = currentUser.getUser();
-                user1.setInstructor(true);
-                when(user1.isInstructor()).thenReturn(true);
-
                 when(courseRepository.findById(eq(123L))).thenReturn(Optional.of(course));
-                // when(userRepository.findByGithubLogin(eq("testuser123"))).thenReturn(Optional.of(user));
                 when(courseStaffRepository.existsById(eq(12345))).thenReturn(true);
 
 
