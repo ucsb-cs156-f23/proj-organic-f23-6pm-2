@@ -41,6 +41,14 @@ describe("UserTable tests", () => {
                 <UsersTable users={usersFixtures.threeUsers} />
             </QueryClientProvider>
         );
+        expectedHeaders.forEach((headerText) => {
+            const header = screen.getByText(headerText);
+            expect(header).toBeInTheDocument();
+        });
+        expectedFields.forEach((field) => {
+            const header = screen.getByTestId(`${testId}-cell-row-0-col-${field}`);
+            expect(header).toBeInTheDocument();
+        });
     });
 
     test("Has the expected column headers and content when toggle is false", () => {
