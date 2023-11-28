@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SchoolRepository extends CrudRepository<School, String> {
-    public Optional<School> findByAbbrev(String abbrev);
+    
 }
