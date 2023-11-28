@@ -1,13 +1,13 @@
 package edu.ucsb.cs156.organic.controllers;
 
 import edu.ucsb.cs156.organic.entities.School;
-import edu.ucsb.cs156.organic.entities.User;
 import edu.ucsb.cs156.organic.errors.EntityNotFoundException;
 import edu.ucsb.cs156.organic.repositories.SchoolRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Schools")
 @RequestMapping("/api/schools")
 @RestController
+@Slf4j
 public class SchoolsController extends ApiController {
 
     @Autowired
@@ -39,7 +40,9 @@ public class SchoolsController extends ApiController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/all")
     public Iterable<School> schools() {
-        return schoolRepository.findAll();
+        Iterable<School> schools = schoolRepository.findAll();
+        log.info("schools={}", schools);
+        return schools;
     }
 
     @Operation(summary = "Get a single school")
@@ -47,7 +50,7 @@ public class SchoolsController extends ApiController {
     @GetMapping("")
     public School getByAbbrev(
         @Parameter(name = "abbrev") @RequestParam String abbrev) {
-        School school = schoolRepository.findByAbbrev(abbrev)
+        School school = schoolRepository.findById(abbrev)
                 .orElseThrow(() -> new EntityNotFoundException(School.class, abbrev));
 
         return school;
