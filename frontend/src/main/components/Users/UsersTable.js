@@ -60,7 +60,7 @@ export default function UsersTable({ users, showToggleButtons}) {
 
     function cellToAxiosParamsToggleInstructor(cell) {
         return {
-            url: usr + "toggleInstructor",
+            url: usr + toggleInstructor,
             method: POST,
             params: {
                 githubId: cell.row.values.githubId
