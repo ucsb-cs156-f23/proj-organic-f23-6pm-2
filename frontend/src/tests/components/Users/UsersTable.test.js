@@ -3,7 +3,6 @@ import UsersTable from "main/components/Users/UsersTable";
 import { formatTime } from "main/utils/dateUtils";
 import usersFixtures from "fixtures/usersFixtures";
 import { QueryClient, QueryClientProvider } from "react-query";
-import mockConsole from "jest-mock-console";
 
 const mockedNavigate = jest.fn();
 
@@ -111,7 +110,6 @@ describe("UserTable tests", () => {
 
 
     test("Toggle Admin button works", async () => {
-        const restoreConsole = mockConsole();
         render(
             <QueryClientProvider client={queryClient}>
                 <UsersTable users={usersFixtures.threeUsers} showToggleButtons={true} />
@@ -129,7 +127,6 @@ describe("UserTable tests", () => {
 
 
     test("Toggle Instructor button works", async () => {
-        const restoreConsole = mockConsole();
         render(
             <QueryClientProvider client={queryClient}>
                 <UsersTable users={usersFixtures.threeUsers} showToggleButtons={true} />
