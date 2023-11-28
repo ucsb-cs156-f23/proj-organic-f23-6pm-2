@@ -69,10 +69,12 @@ describe("UserTable tests", () => {
         );
     
         const testId = "UsersTable";
-        const toggleAdminButton = screen.getByTestId(`${testId}-cell-row-0-col-toggle-admin-button`);
+        const toggleAdminButton = screen.getByTestId(`${testId}-cell-row-2-col-toggle-admin-button`);
         expect(toggleAdminButton).toBeInTheDocument();
         expect(toggleAdminButton).toHaveTextContent("toggle-admin");
         fireEvent.click(toggleAdminButton);
+        const adminCell = screen.getByTestId(`${testId}-cell-row-2-col-admin`);
+        expect(adminCell).toHaveTextContent("true");
 
       })
 
@@ -84,9 +86,11 @@ describe("UserTable tests", () => {
         );
     
         const testId = "UsersTable";
-        const toggleInstructorButton = screen.getByTestId(`${testId}-cell-row-0-col-toggle-instructor-button`);
+        const toggleInstructorButton = screen.getByTestId(`${testId}-cell-row-2-col-toggle-instructor-button`);
         expect(toggleInstructorButton).toBeInTheDocument();
         expect(toggleInstructorButton).toHaveTextContent("toggle-instructor");
         fireEvent.click(toggleInstructorButton);
+        const instructorCell = screen.getByTestId(`${testId}-cell-row-2-col-instructor`);
+        expect(instructorCell).toHaveTextContent("true");
       })
 });
