@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import UsersTable from "main/components/Users/UsersTable";
 import { formatTime } from "main/utils/dateUtils";
 import usersFixtures from "fixtures/usersFixtures";
+import { MemoryRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const mockedNavigate = jest.fn();
@@ -20,7 +21,9 @@ describe("UserTable tests", () => {
     test("renders without crashing for empty table without toggle buttons", () => {
         render(
             <QueryClientProvider client={queryClient}>
-                <UsersTable users={[]} />
+                <MemoryRouter>
+                    <UsersTable users={[]} />
+                </MemoryRouter>
             </QueryClientProvider>
         );
 
@@ -38,7 +41,10 @@ describe("UserTable tests", () => {
     test("renders without crashing for three users without toggle buttons", () => {
         render(
             <QueryClientProvider client={queryClient}>
-                <UsersTable users={usersFixtures.threeUsers} />
+                <MemoryRouter>
+                    <UsersTable users={usersFixtures.threeUsers} />
+
+                </MemoryRouter>
             </QueryClientProvider>
         );
         expectedHeaders.forEach((headerText) => {
@@ -54,7 +60,9 @@ describe("UserTable tests", () => {
     test("Has the expected column headers and content when toggle is false", () => {
         render(
             <QueryClientProvider client={queryClient}>
-                <UsersTable users={usersFixtures.threeUsers} />
+                <MemoryRouter>
+                    <UsersTable users={usersFixtures.threeUsers} />
+                </MemoryRouter>
             </QueryClientProvider>
         );
 
@@ -83,7 +91,10 @@ describe("UserTable tests", () => {
         const showToggleButtons = true
         render(
             <QueryClientProvider client={queryClient}>
-                <UsersTable users={usersFixtures.threeUsers} showToggleButtons={showToggleButtons} />
+                <MemoryRouter>
+                    <UsersTable users={usersFixtures.threeUsers} showToggleButtons={showToggleButtons} />
+
+                </MemoryRouter>
             </QueryClientProvider>
         );
 
@@ -120,7 +131,10 @@ describe("UserTable tests", () => {
     test("Toggle Admin button works", async () => {
         render(
             <QueryClientProvider client={queryClient}>
-                <UsersTable users={usersFixtures.threeUsers} showToggleButtons={true} />
+                <MemoryRouter>
+                    <UsersTable users={usersFixtures.threeUsers} showToggleButtons={true} />
+
+                </MemoryRouter>
             </QueryClientProvider>
         );
 
@@ -134,7 +148,7 @@ describe("UserTable tests", () => {
         const consoleSpy = jest.spyOn(console, 'log');
 
         fireEvent.click(toggleAdmin);
-    
+
         // Wait for toggle log
         await waitFor(() => {
             expect(consoleSpy).toHaveBeenCalledWith("Toggled Admin");
@@ -147,7 +161,10 @@ describe("UserTable tests", () => {
     test("Toggle Instructor button works", async () => {
         render(
             <QueryClientProvider client={queryClient}>
-                <UsersTable users={usersFixtures.threeUsers} showToggleButtons={true} />
+                <MemoryRouter>
+                    <UsersTable users={usersFixtures.threeUsers} showToggleButtons={true} />
+
+                </MemoryRouter>
             </QueryClientProvider>
         );
 
@@ -161,12 +178,12 @@ describe("UserTable tests", () => {
         const consoleSpy = jest.spyOn(console, 'log');
 
         fireEvent.click(toggleInstructor);
-    
+
         // Wait for toggle log
         await waitFor(() => {
             expect(consoleSpy).toHaveBeenCalledWith("Toggled Instructor");
         });
-        
+
         consoleSpy.mockRestore();
     });
 });
