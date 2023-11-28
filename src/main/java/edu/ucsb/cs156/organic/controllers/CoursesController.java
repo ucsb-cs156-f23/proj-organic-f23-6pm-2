@@ -95,6 +95,11 @@ public class CoursesController extends ApiController {
 
         return savedCourse;
     }
+
+    private boolean canEditCourses() {
+        User user = getCurrentUser().getUser();
+        return user.isAdmin() || (user.isInstructor() && courseStaffRepository.existsById(user.getGithubId()));
+    }
     
     @Operation(summary = "Update a course")
     @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR', 'ROLE_ADMIN', 'ROLE_USER')")
@@ -102,8 +107,7 @@ public class CoursesController extends ApiController {
     public Object updateCourse(
             @Parameter(name = "id", description ="id") @RequestParam Long id,
             @RequestBody @Valid Course incoming) {
-        User user = getCurrentUser().getUser();
-        if(user.isAdmin() || (user.isInstructor() && courseStaffRepository.existsById(user.getGithubId()))) {
+        if(canEditCourses()) {
                 Course course = courseRepository.findById(id)
                         .orElseThrow(() -> new EntityNotFoundException(Course.class, id));
 
@@ -127,8 +131,7 @@ public class CoursesController extends ApiController {
     @DeleteMapping("/delete")
     public Object deleteCourse(
             @Parameter(name = "id", description ="id") @RequestParam Long id) {
-        User user = getCurrentUser().getUser();
-        if(user.isAdmin() || (user.isInstructor() && courseStaffRepository.existsById(user.getGithubId()))) {
+        if(canEditCourses()) {
                 Course course = courseRepository.findById(id)
                         .orElseThrow(() -> new EntityNotFoundException(Course.class, id));
 
