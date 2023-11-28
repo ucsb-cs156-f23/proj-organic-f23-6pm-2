@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 describe("UserTable tests", () => {
     const queryClient = new QueryClient();
 
-    test("renders without crashing for empty table", () => {
+    test("renders without crashing for empty table without toggle buttons", () => {
         render(
             <QueryClientProvider client={queryClient}>
                 <UsersTable users={[]} showToggleButtons={false} />
