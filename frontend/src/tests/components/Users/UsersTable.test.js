@@ -2,27 +2,36 @@ import { render, screen } from "@testing-library/react";
 import UsersTable from "main/components/Users/UsersTable";
 import { formatTime } from "main/utils/dateUtils";
 import usersFixtures from "fixtures/usersFixtures";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 describe("UserTable tests", () => {
+    const queryClient = new QueryClient();
+
     test("renders without crashing for empty table", () => {
         render(
-            <UsersTable users={[]} />
+            <QueryClientProvider client={queryClient}>
+                <UsersTable users={[]} />
+            </QueryClientProvider>
         );
     });
 
     test("renders without crashing for three users", () => {
         render(
-            <UsersTable users={usersFixtures.threeUsers} />
+            <QueryClientProvider client={queryClient}>
+                <UsersTable users={usersFixtures.threeUsers} />
+            </QueryClientProvider>
         );
     });
 
     test("Has the expected colum headers and content", () => {
         render(
-          <UsersTable users={usersFixtures.threeUsers}/>
+            <QueryClientProvider client={queryClient}>
+                <UsersTable users={usersFixtures.threeUsers}/>
+            </QueryClientProvider>
         );
     
-        const expectedHeaders = ["githubId", "githubLogin", "fullName", "Email", "Last Online", "Admin"];
-        const expectedFields = ["githubId", "githubLogin", "fullName", "email", "lastOnline", "admin"];
+        const expectedHeaders = ["githubId", "githubLogin", "fullName", "Email", "Last Online", "Admin", "Instructor"];
+        const expectedFields = ["githubId", "githubLogin", "fullName", "email", "lastOnline", "admin", "instructor"];
         const testId = "UsersTable";
 
         expectedHeaders.forEach( (headerText)=> {

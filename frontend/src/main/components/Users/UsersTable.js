@@ -31,7 +31,7 @@ const columns = [
         accessor: (row, _rowIndex) => String(row.admin) // hack needed for boolean values to show up
     },
     {
-        Header: 'instructor',
+        Header: 'Instructor',
         id: 'instructor',
         accessor: (row, _rowIndex) => String(row.instructor) // hack needed for boolean values to show up
     },
