@@ -73,16 +73,9 @@ export default function UsersTable({ users, showToggleButtons = true}) {
         ButtonColumn("toggle-admin", "primary", toggleAdminCallback, "UsersTable"),
         ButtonColumn("toggle-instructor", "primary", toggleInstructorCallback, "UsersTable")
     ]
-    if (showToggleButtons) {
-        return <OurTable
-            data={users}
-            columns={buttonColumn}
-            testid={"UsersTable"} />;
-    }
-    else{
-        return <OurTable
-            data={users}
-            columns={columns}
-            testid={"UsersTable"} />;
-    }
+    const columnsToDisplay = showToggleButtons ? buttonColumn : columns
+    return <OurTable
+        data={users}
+        columns={columnsToDisplay}
+        testid={"UsersTable"} />;
 };

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import UsersTable from "main/components/Users/UsersTable";
 import { formatTime } from "main/utils/dateUtils";
 import usersFixtures from "fixtures/usersFixtures";
@@ -6,6 +6,14 @@ import { QueryClient, QueryClientProvider } from "react-query";
 
 describe("UserTable tests", () => {
     const queryClient = new QueryClient();
+
+    test("renders without crashing for empty table", () => {
+        render(
+            <QueryClientProvider client={queryClient}>
+                <UsersTable users={[]} showToggleButtons={false} />
+            </QueryClientProvider>
+        );
+    });
 
     test("renders without crashing for empty table", () => {
         render(
@@ -50,5 +58,35 @@ describe("UserTable tests", () => {
         expect(screen.getByTestId(`${testId}-cell-row-0-col-lastOnline`)).toHaveTextContent(formatTime(usersFixtures.threeUsers[0].lastOnline));
         expect(screen.getByTestId(`${testId}-cell-row-1-col-githubLogin`)).toHaveTextContent("cgaucho");
         expect(screen.getByTestId(`${testId}-cell-row-1-col-admin`)).toHaveTextContent("false");
+        expect(screen.getByTestId(`${testId}-cell-row-1-col-instructor`)).toHaveTextContent("true");
       });
+
+      test("Toggle Admin button works", () => {
+        render(
+            <QueryClientProvider client={queryClient}>
+                <UsersTable users={usersFixtures.threeUsers}/>
+            </QueryClientProvider>
+        );
+    
+        const testId = "UsersTable";
+        const toggleAdminButton = screen.getByTestId(`${testId}-cell-row-0-col-toggle-admin-button`);
+        expect(toggleAdminButton).toBeInTheDocument();
+        expect(toggleAdminButton).toHaveTextContent("toggle-admin");
+        fireEvent.click(toggleAdminButton);
+
+      })
+
+      test("Toggle Instructor button works", () => {
+        render(
+            <QueryClientProvider client={queryClient}>
+                <UsersTable users={usersFixtures.threeUsers}/>
+            </QueryClientProvider>
+        );
+    
+        const testId = "UsersTable";
+        const toggleInstructorButton = screen.getByTestId(`${testId}-cell-row-0-col-toggle-instructor-button`);
+        expect(toggleInstructorButton).toBeInTheDocument();
+        expect(toggleInstructorButton).toHaveTextContent("toggle-instructor");
+        fireEvent.click(toggleInstructorButton);
+      })
 });
