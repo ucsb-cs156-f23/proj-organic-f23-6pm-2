@@ -37,17 +37,20 @@ const columns = [
     },
 ];
 
-export default function UsersTable({ users, showToggleButtons = false}) {
+export default function UsersTable({ users, showToggleButtons}) {
     function cellToAxiosParamsToggleAdmin(cell) {
         return {
-            url: "/api/admin/users/toggleAdmin?githubId=" + cell.row.values.githubId,
+            url: "/api/admin/users/toggleAdmin",
             method: "POST",
+            params:{
+                githubId: cell.row.values.githubId
+            }
         }
     }
     
     const toggleAdminMutation = useBackendMutation(
         cellToAxiosParamsToggleAdmin,
-        {},
+        {onSuccess : console.log("Toggled Admin")},
         ["/api/admin/users"]
     );
     
@@ -55,14 +58,17 @@ export default function UsersTable({ users, showToggleButtons = false}) {
 
     function cellToAxiosParamsToggleInstructor(cell) {
         return {
-            url: "/api/admin/users/toggleInstructor?githubId=" + cell.row.values.githubId,
+            url: "/api/admin/users/toggleInstructor",
             method: "POST",
+            params: {
+                githubId: cell.row.values.githubId
+            }
         }
     }
     
     const toggleInstructorMutation = useBackendMutation(
         cellToAxiosParamsToggleInstructor,
-        {},
+        {onSuccess : console.log("Toggled Instructor")},
         ["/api/admin/users"]
     );
     
