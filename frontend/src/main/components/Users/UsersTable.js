@@ -4,7 +4,7 @@ import OurTable, { ButtonColumn } from "main/components/OurTable"
 import { useBackendMutation } from "main/utils/useBackend";
 import { formatTime } from "main/utils/dateUtils";
 
-export default function UsersTable({ users, showToggleButtons = true}) {
+export default function UsersTable({ users, showToggleButtons}) {
     const columns = [
         {
             Header: 'githubId',
