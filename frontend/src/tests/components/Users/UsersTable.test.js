@@ -122,7 +122,15 @@ describe("UserTable tests", () => {
         const toggleAdmin = screen.getByTestId(`${testId}-cell-row-0-col-toggle-admin-button`);
         expect(toggleAdmin).toBeInTheDocument();
 
+        // toggle action
+        const consoleSpy = jest.spyOn(console, 'log');
+
         fireEvent.click(toggleAdmin);
+        // Check if console.log was called with the expected message
+        expect(consoleSpy).toHaveBeenCalledWith("Toggled Admin");
+
+        // Restore the original console.log
+        consoleSpy.mockRestore();
     });
 
 
@@ -138,6 +146,15 @@ describe("UserTable tests", () => {
         expect(screen.getByTestId(`${testId}-cell-row-0-col-fullName`)).toHaveTextContent("Phill Conrad");
         const toggleInstructor = screen.getByTestId(`${testId}-cell-row-0-col-toggle-instructor-button`);
         expect(toggleInstructor).toBeInTheDocument();
+
+        // toggle action
+        const consoleSpy = jest.spyOn(console, 'log');
+        
         fireEvent.click(toggleInstructor);
+        // Check if console.log was called with the expected message
+        expect(consoleSpy).toHaveBeenCalledWith("Toggled Instructor");
+
+        // Restore the original console.log
+        consoleSpy.mockRestore();
     });
 });
