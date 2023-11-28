@@ -9,6 +9,7 @@ import edu.ucsb.cs156.organic.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import liquibase.pro.packaged.o;
 import lombok.extern.slf4j.Slf4j;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -133,32 +134,23 @@ public class CoursesController extends ApiController {
     }
 
     //  There is a GET endpoint /api/course/get?id=123 that gets the course with id 123 if you are an admin, or if you are logged in and on the course staff.
-    @Operation(summary = "Get Course by ID")
+    @Operation(summary= "Get a single course by id")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/get")
-    public Course get(
-            @Parameter(name = "courseId") @RequestParam Long courseId)
-            throws JsonProcessingException {
-
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new EntityNotFoundException(Course.class, courseId.toString()));
-        
+    public Course getById(
+            @Parameter(name="id") @RequestParam Long id) {
         User u = getCurrentUser().getUser();
 
-        // return course if user is admin
-        if (u.isAdmin()) {
-            return course;
-
-        // if not admin, check if user is in course staff
-        } else {
-                Iterable<Staff> courseStaff = courseStaffRepository.findByCourseId(course.getId());
-                for (Staff staff : courseStaff) {
-                    if (staff.getGithubId().equals(u.getGithubId())) {
-                        return course;
-                    }
-                }
-                throw new EntityNotFoundException(Course.class, courseId.toString());
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Course.class, id));
+        
+        if(!u.isAdmin()){
+                courseStaffRepository.findByCourseIdAndGithubId(id, u.getGithubId())
+                        .orElseThrow(() -> new AccessDeniedException(
+                String.format("User %s is not authorized to get course %d", u.getGithubLogin(), id)));
         }
+
+        return course;
     }
 
 }

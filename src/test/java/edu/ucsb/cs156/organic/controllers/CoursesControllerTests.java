@@ -370,6 +370,8 @@ public class CoursesControllerTests extends ControllerTestCase {
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
         public void a_user_cannot_get_course_if_not_on_course_staff() throws Exception {
+
+
                 // arrange
 
                 when(courseRepository.findById(eq(course1.getId()))).thenReturn(Optional.of(course1));
@@ -377,7 +379,7 @@ public class CoursesControllerTests extends ControllerTestCase {
                 // act
 
                 MvcResult response = mockMvc.perform(
-                                get("/api/courses/get?courseId=1")
+                                get("/api/courses/get?courseId=42")
                                                 .with(csrf()))
                                 .andExpect(status().isForbidden()).andReturn();
 
