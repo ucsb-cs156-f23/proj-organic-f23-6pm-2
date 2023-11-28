@@ -17,9 +17,9 @@ public class School {
   private String termDescription;
   private String termError;
 
-//   @Override
-//   public String toString() {
-//     return String.format("User: githubId=%d githubLogin=%s admin=%s", githubId, githubLogin, this.admin);
-//   }
+  @Override
+  public String toString() {
+    return String.format("School: abbrev=%s name=%s", abbrev, name);
+  }
 }
 

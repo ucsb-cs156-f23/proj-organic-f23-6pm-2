@@ -1,6 +1,7 @@
 package edu.ucsb.cs156.organic.controllers;
 
 import edu.ucsb.cs156.organic.entities.School;
+import edu.ucsb.cs156.organic.entities.User;
 import edu.ucsb.cs156.organic.errors.EntityNotFoundException;
 import edu.ucsb.cs156.organic.repositories.SchoolRepository;
 
@@ -9,8 +10,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,16 +28,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/schools")
 @RestController
 public class SchoolsController extends ApiController {
+
     @Autowired
     SchoolRepository schoolRepository;
+
+    @Autowired
+    ObjectMapper mapper;
 
     @Operation(summary = "List all schools")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/all")
-    public Iterable<School> allSchools() {
-        Iterable<School> schools = schoolRepository.findAll();
-        
-        return schools;
+    public Iterable<School> schools() {
+        return schoolRepository.findAll();
     }
 
     @Operation(summary = "Get a single school")
