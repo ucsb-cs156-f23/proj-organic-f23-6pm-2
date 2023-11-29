@@ -37,11 +37,11 @@ import org.springframework.stereotype.Service;
 
     try {
 <span class="fc" id="L39">      jobFunction.accept(context);</span>
-<span class="nc" id="L40">    } catch (Exception e) {</span>
-<span class="nc" id="L41">      e.printStackTrace();</span>
-<span class="nc" id="L42">      job.setStatus(&quot;error&quot;);</span>
-<span class="nc" id="L43">      context.log(e.getMessage());</span>
-<span class="nc" id="L44">      return;</span>
+<span class="fc" id="L40">    } catch (Exception e) {</span>
+<span class="fc" id="L41">      e.printStackTrace();</span>
+<span class="fc" id="L42">      job.setStatus(&quot;error&quot;);</span>
+<span class="fc" id="L43">      context.log(e.getMessage());</span>
+<span class="fc" id="L44">      return;</span>
 <span class="fc" id="L45">    }</span>
 
 <span class="fc" id="L47">    job.setStatus(&quot;complete&quot;);</span>
