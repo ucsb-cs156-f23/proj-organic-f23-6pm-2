@@ -346,7 +346,7 @@ public class CoursesControllerTests extends ControllerTestCase {
 
                 // assert
 
-                verify(courseRepository, times(1)).findById(42L);
+                verify(courseRepository, times(1)).findById(eq(42L));
                 String expectedJson = mapper.writeValueAsString(course1);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
@@ -408,20 +408,22 @@ public class CoursesControllerTests extends ControllerTestCase {
         @WithMockUser(roles = { "USER" })
         @Test
         public void a_user_cannot_get_course_if_not_on_course_staff() throws Exception {
-
-
+                // arrange
                 User currentUser = currentUserService.getCurrentUser().getUser();
-        
+
                 when(courseRepository.findById(eq(course1.getId()))).thenReturn(Optional.of(course1));
-        
+
                 // act
-                mockMvc.perform(get("/api/courses?id=1"))
-                        .andExpect(status().isForbidden());
-                
+                MvcResult response = mockMvc.perform(get("/api/courses?id=1"))
+                                .andExpect(status().isForbidden()).andReturn();
+
+
                 // assert
                 verify(courseRepository, times(1)).findById(eq(1L));
-                        
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("AccessDeniedException", json.get("type"));
+                assertEquals(String.format("User %s is not authorized to get course 1", currentUser.getGithubLogin()), json.get("message"));
         }
 
-
+        
 }

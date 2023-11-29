@@ -2,12 +2,14 @@ package edu.ucsb.cs156.organic.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.ucsb.cs156.organic.entities.Staff;
 import edu.ucsb.cs156.organic.errors.EntityNotFoundException;
 import edu.ucsb.cs156.organic.models.CurrentUser;
 import edu.ucsb.cs156.organic.services.CurrentUserService;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -25,15 +27,6 @@ public abstract class ApiController {
   protected CurrentUser getCurrentUser() {
     return currentUserService.getCurrentUser();
   }
-
-  /**
-   * This creates a plain old java object that can be returned as a JSON response
-   * @return a Map object with a single key/value pair: "message" => message
-   */
-
-  protected Object genericMessage(String message) {
-    return Map.of("message", message);
-  }
   
   @ExceptionHandler({ IllegalArgumentException.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -49,6 +42,15 @@ public abstract class ApiController {
   @ExceptionHandler({ EntityNotFoundException.class })
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public Object handleGenericException(Throwable e) {
+    return Map.of(
+      "type", e.getClass().getSimpleName(),
+      "message", e.getMessage()
+    );
+  }
+
+  @ExceptionHandler({ AccessDeniedException.class })
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  public Object handleAccessDeniedException(Throwable e) {
     return Map.of(
       "type", e.getClass().getSimpleName(),
       "message", e.getMessage()
