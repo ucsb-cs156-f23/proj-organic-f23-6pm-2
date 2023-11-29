@@ -20,8 +20,15 @@ Empty.args = {
     users: []
 };
 
-export const ThreeUsers = Template.bind({});
+export const NoButton = Template.bind({});
 
-ThreeUsers.args = {
+NoButton.args = {
     users: usersFixtures.threeUsers
+};
+
+export const WithButton = Template.bind({});
+
+WithButton.args = {
+    users: usersFixtures.threeUsers,
+    showToggleButton: true
 };
