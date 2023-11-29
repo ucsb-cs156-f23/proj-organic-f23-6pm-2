@@ -80,10 +80,9 @@ describe("UserTable tests", () => {
 
 
     test("Has the expected column headers and content when toggle is true", () => {
-        const showToggleButtons = true
         render(
             <QueryClientProvider client={queryClient}>
-                <UsersTable users={usersFixtures.threeUsers} showToggleButtons={showToggleButtons} />
+                <UsersTable users={usersFixtures.threeUsers} />
             </QueryClientProvider>
         );
 
