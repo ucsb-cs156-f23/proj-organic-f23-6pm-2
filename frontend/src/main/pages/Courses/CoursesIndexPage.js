@@ -1,15 +1,45 @@
+import React from 'react'
+import { useBackend } from 'main/utils/useBackend';
+
 import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
+import CoursesTable from 'main/components/Courses/CoursesTable';
+import { useCurrentUser , hasRole} from 'main/utils/currentUser'
+import { Button } from 'react-bootstrap';
 
 export default function CoursesIndexPage() {
 
-  // Stryker disable all : placeholder for future implementation
-  return (
-    <BasicLayout>
-      <div className="pt-2">
-        <h1>Index page not yet implemented</h1>
-        <p><a href="/courses/create">Create</a></p>
-        <p><a href="/courses/edit/1">Edit</a></p>
-      </div>
-    </BasicLayout>
-  )
+    const currentUser = useCurrentUser();
+
+    const { data: courses, error: _error, status: _status } =
+        useBackend(
+            // Stryker disable next-line all : don't test internal caching of React Query
+            ["/api/courses/all"],
+            { method: "GET", url: "/api/courses/all" },
+            // Stryker disable next-line all : don't test default value of empty list
+            []
+        );
+
+    const createButton = () => {
+        if (hasRole(currentUser, "ROLE_ADMIN")) {
+            return (
+                <Button
+                    variant="primary"
+                    href="/courses/create"
+                    style={{ float: "right" }}
+                >
+                    Create Course
+                </Button>
+            )
+        } 
+    }
+
+    return (
+        <BasicLayout>
+            <div className="pt-2">
+                {createButton()}
+                <h1>Courses</h1>
+                <CoursesTable courses={courses} currentUser={currentUser} />
+            </div>
+        </BasicLayout>
+    );
 }
