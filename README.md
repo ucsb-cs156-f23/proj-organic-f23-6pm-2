@@ -3,8 +3,7 @@
 # Deployments
 
 | Type | Link       | 
-|------|------------|
-| prod | <https://organic.dokku-00.cs.ucsb.edu/>     | 
+| prod | <https://po-prod.dokku-06.cs.ucsb.edu/>     | 
 | qa   | <https://organic-qa.dokku-06.cs.ucsb.edu/>  | 
 
 # Description
