@@ -45,12 +45,6 @@
                   },
                   {
                     "column": {
-                      "name": "TERMDESCRIPTION",
-                      "type": "VARCHAR(255)"
-                    }
-                  },
-                  {
-                    "column": {
                       "name": "TERMERROR",
                       "type": "VARCHAR(255)"
                     }

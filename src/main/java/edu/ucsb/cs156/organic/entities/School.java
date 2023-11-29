@@ -14,7 +14,6 @@ public class School {
   private String abbrev;
   private String name;
   private String termRegex;
-  private String termDescription;
   private String termError;
 
   @Override

@@ -63,7 +63,6 @@ public class SchoolsController extends ApiController {
             @Parameter(name = "abbrev", description ="school abbrevation, e.g. ucsb" ) @RequestParam String abbrev,
             @Parameter(name = "name", description ="school name e.g. UC Santa Barbara" ) @RequestParam String name,
             @Parameter(name = "termRegex", description = "term regex, e.g. [WSMF]\\d\\d") @RequestParam String termRegex,
-            @Parameter(name = "termDescription", description = "term description, e.g. Enter quarter, e.g. F23, W24, S24, M24") @RequestParam String termDescription,
             @Parameter(name = "termError", description = "term error, e.g. Quarter must be entered in the correct format") @RequestParam String termError)
             throws JsonProcessingException {
 
@@ -71,7 +70,6 @@ public class SchoolsController extends ApiController {
                 .abbrev(abbrev)
                 .name(name)
                 .termRegex(termRegex)
-                .termDescription(termDescription)
                 .termError(termError)
                 .build();
 
