@@ -30,5 +30,5 @@ export const WithButton = Template.bind({});
 
 WithButton.args = {
     users: usersFixtures.threeUsers,
-    showToggleButton: true
+    showToggleButtons: true
 };
