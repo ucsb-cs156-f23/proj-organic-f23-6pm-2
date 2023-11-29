@@ -50,7 +50,7 @@ public class RoleUserInterceptorTests extends ControllerTestCase{
     @BeforeEach
     public void setupSecurityContext(){
         Map<String, Object> attributes = new HashMap<>();
-        attributes.put("githubId", 123456);
+        attributes.put("id", 123456);
         attributes.put("email", "tommy@ucsb.edu");
         attributes.put("githubLogin", "tommy602");
         attributes.put("fullName", "Thomas Tommot");

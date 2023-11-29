@@ -30,6 +30,7 @@ import edu.ucsb.cs156.organic.errors.EntityNotFoundException;
 
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -95,51 +96,57 @@ public class CoursesController extends ApiController {
 
         return savedCourse;
     }
-
-    private boolean canEditCourses() {
-        User user = getCurrentUser().getUser();
-        return user.isAdmin() || (user.isInstructor() && courseStaffRepository.existsById(user.getGithubId()));
-    }
     
     @Operation(summary = "Update a course")
-    @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR', 'ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR', 'ROLE_ADMIN')")
     @PutMapping("/update")
-    public Object updateCourse(
+    public Course updateCourse(
             @Parameter(name = "id", description ="id") @RequestParam Long id,
             @RequestBody @Valid Course incoming) {
-        if(canEditCourses()) {
-                Course course = courseRepository.findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException(Course.class, id));
-
-                course.setName(incoming.getName());
-                course.setSchool(incoming.getSchool());
-                course.setTerm(incoming.getTerm());
-                course.setStart(incoming.getStart());
-                course.setEnd(incoming.getEnd());
-                course.setGithubOrg(incoming.getGithubOrg());
-
+        User user = getCurrentUser().getUser();
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Course.class, id));
+        course.setName(incoming.getName());
+        course.setSchool(incoming.getSchool());
+        course.setTerm(incoming.getTerm());
+        course.setStart(incoming.getStart());
+        course.setEnd(incoming.getEnd());
+        course.setGithubOrg(incoming.getGithubOrg());
+        if(user.isAdmin()) {
                 courseRepository.save(course);
-
-                return course;
         } else {
-                return genericMessage("You must be an admin or staff in this course to update the course.");
+                Optional<Staff> staff = courseStaffRepository.findByCourseIdAndGithubId(course.getId(), user.getGithubId());
+                if(staff.isEmpty()) {
+                        throw new EntityNotFoundException(Staff.class, id);
+                } else {
+                        courseRepository.save(course);
+                }
         }
+        return course;
     }
 
     @Operation(summary = "Delete a course")
-    @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR', 'ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR', 'ROLE_ADMIN')")
     @DeleteMapping("/delete")
     public Object deleteCourse(
             @Parameter(name = "id", description ="id") @RequestParam Long id) {
-        if(canEditCourses()) {
-                Course course = courseRepository.findById(id)
+        User user = getCurrentUser().getUser();
+        Course course = courseRepository.findById(id)
                         .orElseThrow(() -> new EntityNotFoundException(Course.class, id));
 
+        if(user.isAdmin()) {
                 courseRepository.delete(course);
 
                 return genericMessage("Course with id %s deleted.".formatted(id));
+        } else {
+                Optional<Staff> staff = courseStaffRepository.findByCourseIdAndGithubId(course.getId(), user.getGithubId());
+                if(staff.isEmpty()) {
+                        throw new EntityNotFoundException(Staff.class, id);
+                } else {
+                        courseRepository.delete(course);
+                }
         }
-        return genericMessage("You must be an admin or staff in this course to delete the course.");
+        return genericMessage("Course with id %s deleted.".formatted(id));
     }
 
     @Operation(summary = "Add a staff member to a course")

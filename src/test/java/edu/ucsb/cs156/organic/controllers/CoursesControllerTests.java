@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -233,7 +235,7 @@ public class CoursesControllerTests extends ControllerTestCase {
                 assertEquals(requestBody, responseString);
         }
 
-        @WithMockUser(roles = { "INSTRUCTOR", "USER" })
+        @WithMockUser(roles = { "INSTRUCTOR" })
         @Test
         public void an_instructor_user_can_update_a_course() throws Exception {
                 // arrange
@@ -250,7 +252,7 @@ public class CoursesControllerTests extends ControllerTestCase {
                         .instructor(true)
                         .accessToken("access")
                         .build();
-
+                
                 Course courseOrig = Course.builder()
                                 .id(123L)
                                 .name("CS16")
@@ -270,11 +272,17 @@ public class CoursesControllerTests extends ControllerTestCase {
                                 .end(LocalDateTime.parse("2023-12-31T00:00:00"))
                                 .githubOrg("ucsb-cs24-f23")
                                 .build();
+                
+                Staff staff = Staff.builder()
+                        .id(123L)
+                        .courseId(123L)
+                        .githubId(12345)
+                        .build();
 
                 String requestBody = mapper.writeValueAsString(courseEdited);
 
                 when(courseRepository.findById(eq(123L))).thenReturn(Optional.of(courseOrig));
-                when(courseStaffRepository.existsById(eq(12345))).thenReturn(true);
+                when(courseStaffRepository.findByCourseIdAndGithubId(courseOrig.getId(), user.getGithubId())).thenReturn(Optional.of(staff));
 
 
                 // act
@@ -294,7 +302,7 @@ public class CoursesControllerTests extends ControllerTestCase {
                 assertEquals(requestBody, responseString);
         }
 
-        @WithMockUser(roles = { "USER" })
+        @WithMockUser(roles = { "INSTRUCTOR" })
         @Test
         public void a_non_admin_or_instructor_user_cannot_update_a_course() throws Exception {
                 // arrange
@@ -321,20 +329,21 @@ public class CoursesControllerTests extends ControllerTestCase {
 
                 String requestBody = mapper.writeValueAsString(courseEdited);
 
-                when(courseRepository.findById(eq(123L))).thenReturn(Optional.of(courseOrig));
+                when(courseRepository.findById(eq(courseOrig.getId()))).thenReturn(Optional.of(courseOrig));
 
                 // act
                 MvcResult response = mockMvc.perform(
                                 put("/api/courses/update?id=123")
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .characterEncoding("utf-8")
-                                        .content(requestBody)
-                                        .with(csrf()))
-                                .andExpect(status().isOk()).andReturn();
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .characterEncoding("utf-8")
+                                                .content(requestBody)
+                                                .with(csrf()))
+                                .andExpect(status().isNotFound()).andReturn();
 
                 // assert
+                verify(courseRepository, times(1)).findById(123L);
                 Map<String, Object> json = responseToJson(response);
-                assertEquals("You must be an admin or staff in this course to update the course.", json.get("message"));
+                assertEquals("Staff with id 123 not found", json.get("message"));
         }
 
         @WithMockUser(roles = { "ADMIN" })
@@ -342,7 +351,7 @@ public class CoursesControllerTests extends ControllerTestCase {
         public void an_admin_user_cannot_update_nonexistent_course() throws Exception {
                 // arrange
 
-                        Course courseEdited = Course.builder()
+                Course courseEdited = Course.builder()
                                 .name("CS24")
                                 .school("UCSB")
                                 .term("F23")
@@ -400,7 +409,7 @@ public class CoursesControllerTests extends ControllerTestCase {
                 assertEquals("Course with id 123 deleted.", json.get("message"));
         }
 
-        @WithMockUser(roles = { "USER" })
+        @WithMockUser(roles = { "INSTRUCTOR" })
         @Test
         public void an_instructor_user_can_delete_a_course() throws Exception {
                 // arrange
@@ -428,10 +437,14 @@ public class CoursesControllerTests extends ControllerTestCase {
                         .githubOrg("ucsb-cs16-f23")
                         .build();
                 
-                // when(currentUserService.getCurrentUser().getUser()).thenReturn(user);
+                Staff staff = Staff.builder()
+                        .id(123L)
+                        .courseId(123L)
+                        .githubId(12345)
+                        .build();
+                
                 when(courseRepository.findById(eq(123L))).thenReturn(Optional.of(course));
-                when(courseStaffRepository.existsById(eq(12345))).thenReturn(true);
-
+                when(courseStaffRepository.findByCourseIdAndGithubId(course.getId(), user.getGithubId())).thenReturn(Optional.of(staff));
 
                 // act
                 
@@ -447,11 +460,11 @@ public class CoursesControllerTests extends ControllerTestCase {
                 assertEquals("Course with id 123 deleted.", json.get("message"));
         }
 
-        @WithMockUser(roles = { "USER" })
+        @WithMockUser(roles = { "INSTRUCTOR" })
         @Test
         public void a_non_admin_or_instructor_user_cannot_delete_a_course() throws Exception {
                 // arrange
-                
+
                 Course course = Course.builder()
                                 .id(123L)
                                 .name("CS16")
@@ -462,17 +475,18 @@ public class CoursesControllerTests extends ControllerTestCase {
                                 .githubOrg("ucsb-cs16-f23")
                                 .build();
 
-                when(courseRepository.findById(eq(123L))).thenReturn(Optional.of(course));
+                when(courseRepository.findById(eq(course.getId()))).thenReturn(Optional.of(course));
 
                 // act
                 MvcResult response = mockMvc.perform(
                                 delete("/api/courses/delete?id=123")
                                         .with(csrf()))
-                                .andExpect(status().isOk()).andReturn();
+                                .andExpect(status().isNotFound()).andReturn();
 
                 // assert
+                verify(courseRepository, times(1)).findById(123L);
                 Map<String, Object> json = responseToJson(response);
-                assertEquals("You must be an admin or staff in this course to delete the course.", json.get("message"));
+                assertEquals("Staff with id 123 not found", json.get("message"));
         }
 
         @WithMockUser(roles = { "ADMIN" })

@@ -42,7 +42,7 @@ public class RoleUserInterceptor implements HandlerInterceptor {
 
         if (authentication instanceof OAuth2AuthenticationToken ) {
             OAuth2User oAuthUser = ((OAuth2AuthenticationToken) authentication).getPrincipal();
-            Integer githubID = oAuthUser.getAttribute("githubId");
+            Integer githubID = oAuthUser.getAttribute("id");
             Optional<User> optionalUser = userRepository.findByGithubId(githubID);
             if (optionalUser.isPresent()){
                 User user = optionalUser.get();
