@@ -178,53 +178,53 @@ public class JobsControllerTests extends ControllerTestCase {
                
         }
 
-        // @WithMockUser(roles = { "ADMIN" })
-        // @Test
-        // public void admin_can_launch_test_job_that_fails() throws Exception {
+        @WithMockUser(roles = { "ADMIN" })
+        @Test
+        public void admin_can_launch_test_job_that_fails() throws Exception {
 
-        //         // arrange
+                // arrange
 
-        //         User user = currentUserService.getUser();
+                User user = currentUserService.getUser();
 
-        //         Job jobStarted = Job.builder()
-        //                         .id(0L)
-        //                         .createdBy(user)
-        //                         .createdAt(null)
-        //                         .updatedAt(null)
-        //                         .status("running")
-        //                         .log("Hello World! from test job!")
-        //                         .build();
+                Job jobStarted = Job.builder()
+                                .id(0L)
+                                .createdBy(user)
+                                .createdAt(null)
+                                .updatedAt(null)
+                                .status("running")
+                                .log("Hello World! from test job!")
+                                .build();
 
-        //         Job jobFailed = Job.builder()
-        //                         .id(0L)
-        //                         .createdBy(user)
-        //                         .createdAt(null)
-        //                         .updatedAt(null)
-        //                         .status("error")
-        //                         .log("Hello World! from test job!\nFail!")
-        //                         .build();
+                Job jobFailed = Job.builder()
+                                .id(0L)
+                                .createdBy(user)
+                                .createdAt(null)
+                                .updatedAt(null)
+                                .status("error")
+                                .log("Hello World! from test job!\nFail!")
+                                .build();
 
-        //         when(jobsRepository.save(eq(jobStarted))).thenReturn(jobStarted);
-        //         when(jobsRepository.save(eq(jobFailed))).thenReturn(jobFailed);
+                when(jobsRepository.save(eq(jobStarted))).thenReturn(jobStarted);
+                when(jobsRepository.save(eq(jobFailed))).thenReturn(jobFailed);
 
-        //         // act
-        //         MvcResult response = mockMvc
-        //                         .perform(post("/api/jobs/launch/testjob?fail=true&sleepMs=4000").with(csrf()))
-        //                         .andExpect(status().isOk()).andReturn();
+                // act
+                MvcResult response = mockMvc
+                                .perform(post("/api/jobs/launch/testjob?fail=true&sleepMs=4000").with(csrf()))
+                                .andExpect(status().isOk()).andReturn();
 
-        //         String responseString = response.getResponse().getContentAsString();
-        //         Job jobReturned = objectMapper.readValue(responseString, Job.class);
+                String responseString = response.getResponse().getContentAsString();
+                Job jobReturned = objectMapper.readValue(responseString, Job.class);
 
-        //         assertEquals("running", jobReturned.getStatus());
+                assertEquals("running", jobReturned.getStatus());
 
-        //         await().atMost(20, SECONDS)
-        //         .untilAsserted(() -> {
-        //                 verify(jobsRepository, atLeast(1)).save(jobCaptor.capture());                        
-        //                 List<Job> values = jobCaptor.getAllValues();
-        //                 assertEquals("error", values.get(0).getStatus(), "first saved job should show running");
-        //                 assertEquals(jobFailed.getLog(), values.get(0).getLog());
-        //         });
-        // }
+                await().atMost(20, SECONDS)
+                .untilAsserted(() -> {
+                        verify(jobsRepository, atLeast(1)).save(jobCaptor.capture());                        
+                        List<Job> values = jobCaptor.getAllValues();
+                        assertEquals("error", values.get(0).getStatus(), "first saved job should show running");
+                        assertEquals(jobFailed.getLog(), values.get(0).getLog());
+                });
+        }
 
         @WithMockUser(roles = { "ADMIN" })
         @Test
