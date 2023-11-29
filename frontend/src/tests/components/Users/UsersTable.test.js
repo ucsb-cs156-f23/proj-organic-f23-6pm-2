@@ -54,7 +54,7 @@ describe("UserTable tests", () => {
     test("Has the expected column headers and content when toggle is false", () => {
         render(
             <QueryClientProvider client={queryClient}>
-                <UsersTable users={usersFixtures.threeUsers} />
+                <UsersTable users={usersFixtures.threeUsers} showToggleButtons = {false}/>
             </QueryClientProvider>
         );
 
