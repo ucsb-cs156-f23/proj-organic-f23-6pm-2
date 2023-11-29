@@ -1,10 +1,9 @@
 import {React} from "react";
-import {toast} from "react-toastify";
 import OurTable, { ButtonColumn } from "main/components/OurTable"
 import { useBackendMutation } from "main/utils/useBackend";
 import { formatTime } from "main/utils/dateUtils";
 
-export default function UsersTable({ users, showToggleButtons = true}) {
+export default function UsersTable({ users, showToggleButtons}) {
 
     const columns = [
         {
@@ -45,18 +44,6 @@ export default function UsersTable({ users, showToggleButtons = true}) {
     const POST = "POST"
     const usr = "/api/admin/users"
 
-    async function toggleAdminSuccess(message = "Toggled Admin") {
-        console.log(message);
-        //toast(message);
-        //window.location.reload();
-    }
-    
-    async function toggleInstructorSuccess(message = "Toggled Instructor") {
-        console.log(message);
-        toast(message);
-        //window.location.reload();
-    }
-
     function cellToAxiosParamsToggleAdmin(cell) {
         return {
             url: usr + "/toggleAdmin",
@@ -69,7 +56,7 @@ export default function UsersTable({ users, showToggleButtons = true}) {
     
     const toggleAdminMutation = useBackendMutation(
         cellToAxiosParamsToggleAdmin,
-        {onSuccess : toggleAdminSuccess},
+        {},
         "users"
     );
     
@@ -87,7 +74,7 @@ export default function UsersTable({ users, showToggleButtons = true}) {
     
     const toggleInstructorMutation = useBackendMutation(
         cellToAxiosParamsToggleInstructor,
-        {onSuccess : toggleInstructorSuccess},
+        {},
         "users"
     );
     

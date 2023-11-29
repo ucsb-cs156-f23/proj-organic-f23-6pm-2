@@ -4,14 +4,10 @@ import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
 import ReactJson from "react-json-view";
 import UsersTable from "main/components/Users/UsersTable"
 import UserEmailsTable from "main/components/Users/UserEmailsTable";
-import { useUsers } from "main/utils/users";
 
 const ProfilePage = () => {
 
     const { data: currentUser } = useCurrentUser();
-    const { data: users} = useUsers();
-    
-    const user = users?.find((user) => user.id === currentUser.root.user.id);
 
     if (!currentUser.loggedIn) {
         return (
@@ -24,7 +20,7 @@ const ProfilePage = () => {
             <h1 className={"mb-3"}>
                 User Profile for {currentUser.root.user.githubLogin}
             </h1>
-            <UsersTable users={[user]}/>
+            <UsersTable users={[currentUser.root.user]}/>
             <h2 className={"mt-3 mb-3"}>
                 Emails
             </h2>
