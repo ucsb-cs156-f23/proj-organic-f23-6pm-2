@@ -15,6 +15,7 @@ public class School {
   private String name;
   private String termRegex;
   private String termError;
+  private String termDescription;
 
   @Override
   public String toString() {
