@@ -116,7 +116,6 @@ describe("UserTable tests", () => {
         expect(toggleInstructor).toHaveClass("btn-primary");
     });
 
-
     test("Toggle Admin button works", async () => {
         render(
             <QueryClientProvider client={queryClient}>
@@ -130,17 +129,8 @@ describe("UserTable tests", () => {
         const toggleAdmin = screen.getByTestId(`${testId}-cell-row-0-col-toggle-admin-button`);
         expect(toggleAdmin).toBeInTheDocument();
 
-        // toggle action
-        // const consoleSpy = jest.spyOn(console, 'log');
-
         fireEvent.click(toggleAdmin);
-    
-        // // Wait for toggle log
-        // await waitFor(() => {
-        //     expect(consoleSpy).toHaveBeenCalledWith("Toggled Admin");
-        // });
 
-        // consoleSpy.mockRestore();
     });
 
 
@@ -157,16 +147,6 @@ describe("UserTable tests", () => {
         const toggleInstructor = screen.getByTestId(`${testId}-cell-row-0-col-toggle-instructor-button`);
         expect(toggleInstructor).toBeInTheDocument();
 
-        // toggle action
-        // const consoleSpy = jest.spyOn(console, 'log');
-
         fireEvent.click(toggleInstructor);
-    
-        // // Wait for toggle log
-        // await waitFor(() => {
-        //     expect(consoleSpy).toHaveBeenCalledWith("Toggled Instructor");
-        // });
-        
-        // consoleSpy.mockRestore();
     });
 });

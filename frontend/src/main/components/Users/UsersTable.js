@@ -4,7 +4,8 @@ import OurTable, { ButtonColumn } from "main/components/OurTable"
 import { useBackendMutation } from "main/utils/useBackend";
 import { formatTime } from "main/utils/dateUtils";
 
-export default function UsersTable({ users, showToggleButtons}) {
+export default function UsersTable({ users, showToggleButtons = true}) {
+
     const columns = [
         {
             Header: 'githubId',
@@ -46,14 +47,14 @@ export default function UsersTable({ users, showToggleButtons}) {
 
     async function toggleAdminSuccess(message = "Toggled Admin") {
         console.log(message);
-        toast(message);
-        window.location.reload();
+        //toast(message);
+        //window.location.reload();
     }
     
     async function toggleInstructorSuccess(message = "Toggled Instructor") {
         console.log(message);
         toast(message);
-        window.location.reload();
+        //window.location.reload();
     }
 
     function cellToAxiosParamsToggleAdmin(cell) {
@@ -69,7 +70,7 @@ export default function UsersTable({ users, showToggleButtons}) {
     const toggleAdminMutation = useBackendMutation(
         cellToAxiosParamsToggleAdmin,
         {onSuccess : toggleAdminSuccess},
-        [usr]
+        "users"
     );
     
     const toggleAdminCallback = async (cell) => { toggleAdminMutation.mutate(cell);}
@@ -87,10 +88,11 @@ export default function UsersTable({ users, showToggleButtons}) {
     const toggleInstructorMutation = useBackendMutation(
         cellToAxiosParamsToggleInstructor,
         {onSuccess : toggleInstructorSuccess},
-        [usr]
+        "users"
     );
     
-    const toggleInstructorCallback = async (cell) => { toggleInstructorMutation.mutate(cell);}
+    const toggleInstructorCallback = async (cell) => { 
+        toggleInstructorMutation.mutate(cell);}
 
     // Stryker restore all
 
