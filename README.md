@@ -5,7 +5,7 @@
 | Type | Link       | 
 |------|------------|
 | prod | <https://organic.dokku-00.cs.ucsb.edu/>     | 
-| qa   | <https://organic-qa.dokku-00.cs.ucsb.edu/>  | 
+| qa   | <https://organic-qa.dokku-06.cs.ucsb.edu/>  | 
 
 # Description
 
