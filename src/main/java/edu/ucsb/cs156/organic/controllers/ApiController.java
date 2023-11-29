@@ -27,6 +27,10 @@ public abstract class ApiController {
   protected CurrentUser getCurrentUser() {
     return currentUserService.getCurrentUser();
   }
+
+  protected Object genericMessage(String message) {
+    return Map.of("message", message);
+  }
   
   @ExceptionHandler({ IllegalArgumentException.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -48,6 +52,12 @@ public abstract class ApiController {
     );
   }
 
+  /**
+   * Exception handler to return HTTP status code 403 Forbidden 
+   * when an AccessDeniedException is thrown
+   * @param e AccessDeniedException
+   * @return map with type and message
+   */
   @ExceptionHandler({ AccessDeniedException.class })
   @ResponseStatus(HttpStatus.FORBIDDEN)
   public Object handleAccessDeniedException(Throwable e) {
