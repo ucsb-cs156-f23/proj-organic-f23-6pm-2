@@ -6,6 +6,7 @@ import edu.ucsb.cs156.organic.entities.Staff;
 import edu.ucsb.cs156.organic.errors.EntityNotFoundException;
 import edu.ucsb.cs156.organic.models.CurrentUser;
 import edu.ucsb.cs156.organic.services.CurrentUserService;
+import liquibase.pro.packaged.a;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
@@ -28,17 +29,20 @@ public abstract class ApiController {
     return currentUserService.getCurrentUser();
   }
 
+  /**
+   * This creates a plain old java object that can be returned as a JSON response
+   * @return a Map object with a single key/value pair: "message" => message
+   */
   protected Object genericMessage(String message) {
     return Map.of("message", message);
   }
-  
-  @ExceptionHandler({ IllegalArgumentException.class})
+
+  @ExceptionHandler({ IllegalArgumentException.class })
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public Object handleIllegalArgumentException(Throwable e) {
-    Map<String,String> map =  Map.of(
-      "type", e.getClass().getSimpleName(),
-      "message", e.getMessage()
-    );
+    Map<String, String> map = Map.of(
+        "type", e.getClass().getSimpleName(),
+        "message", e.getMessage());
     log.error("Exception thrown: {}", map);
     return map;
   }
@@ -47,14 +51,14 @@ public abstract class ApiController {
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public Object handleGenericException(Throwable e) {
     return Map.of(
-      "type", e.getClass().getSimpleName(),
-      "message", e.getMessage()
-    );
+        "type", e.getClass().getSimpleName(),
+        "message", e.getMessage());
   }
 
   /**
-   * Exception handler to return HTTP status code 403 Forbidden 
+   * Exception handler to return HTTP status code 403 Forbidden
    * when an AccessDeniedException is thrown
+   * 
    * @param e AccessDeniedException
    * @return map with type and message
    */
@@ -62,15 +66,15 @@ public abstract class ApiController {
   @ResponseStatus(HttpStatus.FORBIDDEN)
   public Object handleAccessDeniedException(Throwable e) {
     return Map.of(
-      "type", e.getClass().getSimpleName(),
-      "message", e.getMessage()
-    );
+        "type", e.getClass().getSimpleName(),
+        "message", e.getMessage());
   }
 
   private ObjectMapper mapper;
 
   /**
    * Special ObjectMapper that ignores Mockito mocks
+   * 
    * @return ObjectMapper mapper
    */
   public ObjectMapper getMapper() {
@@ -78,7 +82,7 @@ public abstract class ApiController {
   }
 
   public ApiController() {
-   mapper = mapperThatIgnoresMockitoMocks();
+    mapper = mapperThatIgnoresMockitoMocks();
   }
 
   public static ObjectMapper mapperThatIgnoresMockitoMocks() {
