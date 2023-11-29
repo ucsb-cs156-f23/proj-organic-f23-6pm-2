@@ -78,7 +78,6 @@ describe("UserTable tests", () => {
         expect(screen.queryByText("toggle-instructor")).not.toBeInTheDocument();
     });
 
-
     test("Has the expected column headers and content when toggle is true", () => {
         const showToggleButtons = true
         render(
