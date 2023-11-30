@@ -14,6 +14,7 @@ export default function CoursesIndexPage() {
         useBackend(
             // Stryker disable next-line all : don't test internal caching of React Query
             ["/api/courses/all"],
+            // Stryker disable next-line all : don't test api method changing
             { method: "GET", url: "/api/courses/all" },
             // Stryker disable next-line all : don't test default value of empty list
             []
