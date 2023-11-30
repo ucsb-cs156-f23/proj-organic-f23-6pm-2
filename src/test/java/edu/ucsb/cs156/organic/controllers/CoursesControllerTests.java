@@ -180,6 +180,7 @@ public class CoursesControllerTests extends ControllerTestCase {
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
         }
+        
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
@@ -419,8 +420,7 @@ public class CoursesControllerTests extends ControllerTestCase {
                         .andExpect(status().isForbidden());
                 
                 // assert
-                verify(courseRepository, times(1)).findById(eq(1L));
-                        
+                verify(courseRepository, times(1)).findById(eq(1L));         
         }
 
 
