@@ -78,23 +78,23 @@ describe("CoursesForm tests", () => {
         const nameField = screen.getByTestId("CoursesForm-name");
         const schoolField = screen.getByTestId("CoursesForm-school");
         const termField = screen.getByTestId("CoursesForm-term");
-        const startField = screen.getByTestId("CoursesForm-start");
-        const endField = screen.getByTestId("CoursesForm-end");
+        const startDateField = screen.getByTestId("CoursesForm-startDate");
+        const endDateField = screen.getByTestId("CoursesForm-endDate");
         const githubOrgField = screen.getByTestId("CoursesForm-githubOrg");
         const submitButton = screen.getByTestId("CoursesForm-submit");
 
         fireEvent.change(nameField, { target: { value: 'course1' } });
         fireEvent.change(schoolField, { target: { value: 'school1' } });
         fireEvent.change(termField, { target: { value: 'term1' } });
-        fireEvent.change(startField, { target: { value: '2023-01-01T12:00:00' } });
-        fireEvent.change(endField, { target: { value: '2023-05-05T12:00:00' } });
+        fireEvent.change(startDateField, { target: { value: '2023-01-01T12:00:00' } });
+        fireEvent.change(endDateField, { target: { value: '2023-05-05T12:00:00' } });
         fireEvent.change(githubOrgField, { target: { value: 'org1' } });
         fireEvent.click(submitButton);
 
         await waitFor(() => expect(mockSubmitAction).toHaveBeenCalled());
 
-        expect(screen.queryByText(/start must be in ISO format/)).not.toBeInTheDocument();
-        expect(screen.queryByText(/end must be in ISO format/)).not.toBeInTheDocument();
+        expect(screen.queryByText(/startDate must be in ISO format/)).not.toBeInTheDocument();
+        expect(screen.queryByText(/endDate must be in ISO format/)).not.toBeInTheDocument();
 
     });
 
