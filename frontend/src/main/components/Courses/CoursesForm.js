@@ -90,30 +90,30 @@ function CoursesForm({ initialContents, submitAction, buttonLabel = "Create" }) 
             </Form.Group>
 
             <Form.Group className="mb-3" >
-                <Form.Label htmlFor="start">Start Date (iso format)</Form.Label>
+                <Form.Label htmlFor="startDate">Start Date (iso format)</Form.Label>
                 <Form.Control
-                    data-testid={testIdPrefix + "-start"}
-                    id="start"
+                    data-testid={testIdPrefix + "-startDate"}
+                    id="startDate"
                     type="datetime-local"
-                    isInvalid={Boolean(errors.start)}
-                    {...register("start", { required: true, pattern: isodate_regex })}
+                    isInvalid={Boolean(errors.startDate)}
+                    {...register("startDate", { required: true, pattern: isodate_regex })}
                 />
                 <Form.Control.Feedback type="invalid">
-                    {errors.start && 'Start Date is required.'}
+                    {errors.startDate && 'Start Date is required.'}
                 </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" >
-                <Form.Label htmlFor="end">End Date (iso format)</Form.Label>
+                <Form.Label htmlFor="endDate">End Date (iso format)</Form.Label>
                 <Form.Control
-                    data-testid={testIdPrefix + "-end"}
-                    id="end"
+                    data-testid={testIdPrefix + "-endDate"}
+                    id="endDate"
                     type="datetime-local"
-                    isInvalid={Boolean(errors.end)}
-                    {...register("end", { required: true, pattern: isodate_regex })}
+                    isInvalid={Boolean(errors.endDate)}
+                    {...register("endDate", { required: true, pattern: isodate_regex })}
                 />
                 <Form.Control.Feedback type="invalid">
-                    {errors.end && 'End Date is required.'}
+                    {errors.endDate && 'End Date is required.'}
                 </Form.Control.Feedback>
             </Form.Group>
 
