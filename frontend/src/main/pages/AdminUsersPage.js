@@ -5,7 +5,7 @@ import UsersTable from "main/components/Users/UsersTable"
 import { useUsers } from "main/utils/users";
 const AdminUsersPage = () => {
 
-    const { data: users } = useUsers();
+    const { data: users} = useUsers();
 
     return (
         <BasicLayout>
