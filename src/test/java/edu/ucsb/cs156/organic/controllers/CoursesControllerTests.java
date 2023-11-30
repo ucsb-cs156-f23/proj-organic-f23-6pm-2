@@ -200,8 +200,8 @@ public class CoursesControllerTests extends ControllerTestCase {
                                 .name("CS123")
                                 .school("UCSB")
                                 .term("F23")
-                                .start(LocalDateTime.parse("2023-09-02T00:00:00"))
-                                .end(LocalDateTime.parse("2023-12-30T00:00:00"))
+                                .startDate(LocalDateTime.parse("2023-09-02T00:00:00"))
+                                .endDate(LocalDateTime.parse("2023-12-30T00:00:00"))
                                 .githubOrg("ucsb-cs123-f23")
                                 .build();
 
@@ -210,8 +210,8 @@ public class CoursesControllerTests extends ControllerTestCase {
                                 .name("CS124")
                                 .school("UCSBSB")
                                 .term("W24")
-                                .start(LocalDateTime.parse("2024-01-01T00:00:00"))
-                                .end(LocalDateTime.parse("2024-03-31T00:00:00"))
+                                .startDate(LocalDateTime.parse("2024-01-01T00:00:00"))
+                                .endDate(LocalDateTime.parse("2024-03-31T00:00:00"))
                                 .githubOrg("ucsb-cs123-w24")
                                 .build();
 
@@ -258,8 +258,8 @@ public class CoursesControllerTests extends ControllerTestCase {
                                 .name("CS16")
                                 .school("UCSB")
                                 .term("F23")
-                                .start(LocalDateTime.parse("2023-09-01T00:00:00"))
-                                .end(LocalDateTime.parse("2023-12-31T00:00:00"))
+                                .startDate(LocalDateTime.parse("2023-09-01T00:00:00"))
+                                .endDate(LocalDateTime.parse("2023-12-31T00:00:00"))
                                 .githubOrg("ucsb-cs16-f23")
                                 .build();
 
@@ -268,8 +268,8 @@ public class CoursesControllerTests extends ControllerTestCase {
                                 .name("CS24")
                                 .school("UCSB")
                                 .term("F23")
-                                .start(LocalDateTime.parse("2023-09-01T00:00:00"))
-                                .end(LocalDateTime.parse("2023-12-31T00:00:00"))
+                                .startDate(LocalDateTime.parse("2023-09-01T00:00:00"))
+                                .endDate(LocalDateTime.parse("2023-12-31T00:00:00"))
                                 .githubOrg("ucsb-cs24-f23")
                                 .build();
                 
@@ -312,8 +312,8 @@ public class CoursesControllerTests extends ControllerTestCase {
                                 .name("CS16")
                                 .school("UCSB")
                                 .term("F23")
-                                .start(LocalDateTime.parse("2023-09-01T00:00:00"))
-                                .end(LocalDateTime.parse("2023-12-31T00:00:00"))
+                                .startDate(LocalDateTime.parse("2023-09-01T00:00:00"))
+                                .endDate(LocalDateTime.parse("2023-12-31T00:00:00"))
                                 .githubOrg("ucsb-cs16-f23")
                                 .build();
 
@@ -322,8 +322,8 @@ public class CoursesControllerTests extends ControllerTestCase {
                                 .name("CS24")
                                 .school("UCSB")
                                 .term("F23")
-                                .start(LocalDateTime.parse("2023-09-01T00:00:00"))
-                                .end(LocalDateTime.parse("2023-12-31T00:00:00"))
+                                .startDate(LocalDateTime.parse("2023-09-01T00:00:00"))
+                                .endDate(LocalDateTime.parse("2023-12-31T00:00:00"))
                                 .githubOrg("ucsb-cs24-f23")
                                 .build();
 
@@ -355,8 +355,8 @@ public class CoursesControllerTests extends ControllerTestCase {
                                 .name("CS24")
                                 .school("UCSB")
                                 .term("F23")
-                                .start(LocalDateTime.parse("2023-09-01T00:00:00"))
-                                .end(LocalDateTime.parse("2023-12-31T00:00:00"))
+                                .startDate(LocalDateTime.parse("2023-09-01T00:00:00"))
+                                .endDate(LocalDateTime.parse("2023-12-31T00:00:00"))
                                 .githubOrg("ucsb-cs24-f23")
                                 .build();
 
@@ -389,8 +389,8 @@ public class CoursesControllerTests extends ControllerTestCase {
                                 .name("CS16")
                                 .school("UCSB")
                                 .term("F23")
-                                .start(LocalDateTime.parse("2023-09-01T00:00:00"))
-                                .end(LocalDateTime.parse("2023-12-31T00:00:00"))
+                                .startDate(LocalDateTime.parse("2023-09-01T00:00:00"))
+                                .endDate(LocalDateTime.parse("2023-12-31T00:00:00"))
                                 .githubOrg("ucsb-cs16-f23")
                                 .build();
 
@@ -432,8 +432,8 @@ public class CoursesControllerTests extends ControllerTestCase {
                         .name("CS16")
                         .school("UCSB")
                         .term("F23")
-                        .start(LocalDateTime.parse("2023-09-01T00:00:00"))
-                        .end(LocalDateTime.parse("2023-12-31T00:00:00"))
+                        .startDate(LocalDateTime.parse("2023-09-01T00:00:00"))
+                        .endDate(LocalDateTime.parse("2023-12-31T00:00:00"))
                         .githubOrg("ucsb-cs16-f23")
                         .build();
                 
@@ -470,8 +470,8 @@ public class CoursesControllerTests extends ControllerTestCase {
                                 .name("CS16")
                                 .school("UCSB")
                                 .term("F23")
-                                .start(LocalDateTime.parse("2023-09-01T00:00:00"))
-                                .end(LocalDateTime.parse("2023-12-31T00:00:00"))
+                                .startDate(LocalDateTime.parse("2023-09-01T00:00:00"))
+                                .endDate(LocalDateTime.parse("2023-12-31T00:00:00"))
                                 .githubOrg("ucsb-cs16-f23")
                                 .build();
 
