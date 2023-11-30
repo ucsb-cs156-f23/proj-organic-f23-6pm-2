@@ -135,4 +135,81 @@ describe("AppNavbar tests", () => {
         expect(await screen.findByTestId("AppNavbar")).toBeInTheDocument();
         expect(screen.queryByTestId(/AppNavbarLocalhost/i)).toBeNull();
     });
+
+    test("renders the courses link correctly for admin", async () => {
+
+        const currentUser = currentUserFixtures.adminUser;
+        const systemInfo = systemInfoFixtures.showingBoth;
+
+        const doLogin = jest.fn();
+
+        render(
+            <QueryClientProvider client={queryClient}>
+                <MemoryRouter>
+                    <AppNavbar currentUser={currentUser} systemInfo={systemInfo} doLogin={doLogin} />
+                </MemoryRouter>
+            </QueryClientProvider>
+        );
+
+        await screen.findByText("Courses");
+        const link = screen.getByText("Courses");
+        expect(link).toBeInTheDocument();
+        expect(link.getAttribute("href")).toBe("/courses");
+    });
+
+    test("renders the courses link correctly for instructor", async () => {
+
+        const currentUser = currentUserFixtures.instructorUser;
+        const systemInfo = systemInfoFixtures.showingBoth;
+
+        const doLogin = jest.fn();
+
+        render(
+            <QueryClientProvider client={queryClient}>
+                <MemoryRouter>
+                    <AppNavbar currentUser={currentUser} systemInfo={systemInfo} doLogin={doLogin} />
+                </MemoryRouter>
+            </QueryClientProvider>
+        );
+
+        await screen.findByText("Courses");
+        const link = screen.getByText("Courses");
+        expect(link).toBeInTheDocument();
+        expect(link.getAttribute("href")).toBe("/courses");
+    });
+
+    test("Courses link does NOT show when user is not admin or instructor", async () => {
+
+        const currentUser = currentUserFixtures.userOnly;
+        const systemInfo = systemInfoFixtures.showingBoth;
+
+        const doLogin = jest.fn();
+
+        render(
+            <QueryClientProvider client={queryClient}>
+                <MemoryRouter>
+                    <AppNavbar currentUser={currentUser} systemInfo={systemInfo} doLogin={doLogin} />
+                </MemoryRouter>
+            </QueryClientProvider>
+        );
+
+        expect(screen.queryByText("Courses")).not.toBeInTheDocument();
+    });
+
+    test("Courses link does NOT show when not logged in", async () => {
+        const currentUser = null;
+        const systemInfo = systemInfoFixtures.showingBoth;
+        const doLogin = jest.fn();
+
+        render(
+            <QueryClientProvider client={queryClient}>
+                <MemoryRouter>
+                    <AppNavbar currentUser={currentUser} systemInfo={systemInfo} doLogin={doLogin} />
+                </MemoryRouter>
+            </QueryClientProvider>
+        );
+
+        expect(screen.queryByText("Restaurants")).not.toBeInTheDocument();
+        expect(screen.queryByText("UCSBDates")).not.toBeInTheDocument();
+    });
 });
