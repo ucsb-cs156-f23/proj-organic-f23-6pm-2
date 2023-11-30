@@ -31,14 +31,14 @@ export default function CoursesEditPage({storybook=false}) {
             name: course.name,
             school: course.school,
             term: course.term,
-            start: course.start,
-            end: course.end,
+            startDate: course.startDate,
+            endDate: course.endDate,
             githubOrg: course.githubOrg
         }
     });
 
     const onSuccess = (course) => {
-        toast(`Course Updated - id: ${course.id} name: ${course.name} school: ${course.school} term: ${course.term} start: ${course.start} end: ${course.end} githubOrg: ${course.githubOrg}`);
+        toast(`Course Updated - id: ${course.id} name: ${course.name} school: ${course.school} term: ${course.term} startDate: ${course.startDate} endDate: ${course.endDate} githubOrg: ${course.githubOrg}`);
     }
 
     const mutation = useBackendMutation(
