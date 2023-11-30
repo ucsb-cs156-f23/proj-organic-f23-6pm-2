@@ -14,13 +14,24 @@ const ProfilePage = () => {
             <p>Not logged in.</p>
         )
     }
+    const displayUser = {
+        ...currentUser,
+        root: {
+          ...currentUser.root,
+          user: {
+            ...currentUser.root.user,
+            githubLogin: "test",
+            lastOnline: currentUser.root.user.lastOnline*10**3
+          }
+        }
+      };
 
     return (
         <BasicLayout>
             <h1 className={"mb-3"}>
                 User Profile for {currentUser.root.user.githubLogin}
             </h1>
-            <UsersTable users={[currentUser.root.user]}/>
+            <UsersTable users={[displayUser.root.user]}/>
             <h2 className={"mt-3 mb-3"}>
                 Emails
             </h2>
