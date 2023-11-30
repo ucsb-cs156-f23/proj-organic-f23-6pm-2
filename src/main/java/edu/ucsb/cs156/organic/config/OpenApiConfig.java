@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
   title = "Organic",
   description = """
     <p><a href='/'>Home Page</a></p>
-    <p><a href='https://github.com/ucsb-cs156/proj-organic'>proj-organic on Github</a></p>
+    <p><a href='https://github.com/ucsb-cs156-f23/proj-organic-f23-6pm-2'>proj-organic on Github</a></p>
     <p><a href='/h2-console'>H2 Console (only on localhost)</a></p>
     """     
     ),
