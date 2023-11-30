@@ -54,7 +54,7 @@ describe("UserTable tests", () => {
     test("Has the expected column headers and content when toggle is false", () => {
         render(
             <QueryClientProvider client={queryClient}>
-                <UsersTable users={usersFixtures.threeUsers} />
+                <UsersTable users={usersFixtures.threeUsers} showToggleButtons = {false}/>
             </QueryClientProvider>
         );
 
@@ -78,11 +78,11 @@ describe("UserTable tests", () => {
         expect(screen.queryByText("toggle-instructor")).not.toBeInTheDocument();
     });
 
+
     test("Has the expected column headers and content when toggle is true", () => {
-        const showToggleButtons = true
         render(
             <QueryClientProvider client={queryClient}>
-                <UsersTable users={usersFixtures.threeUsers} showToggleButtons={showToggleButtons} />
+                <UsersTable users={usersFixtures.threeUsers} />
             </QueryClientProvider>
         );
 
