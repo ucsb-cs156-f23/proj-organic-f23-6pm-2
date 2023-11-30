@@ -68,6 +68,7 @@ export function useBackendMutation(objectToAxiosParams, useMutationParams, query
         },
         // Stryker disable all : Not sure how to set up the complex behavior needed to test this
         onSettled: () => {
+            console.log("onSettled", queryKey)
             if (queryKey !== null)
                 queryClient.invalidateQueries(queryKey);
         },
