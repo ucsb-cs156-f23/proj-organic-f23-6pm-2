@@ -20,7 +20,6 @@ const ProfilePage = () => {
           ...currentUser.root,
           user: {
             ...currentUser.root.user,
-            githubLogin: "test",
             lastOnline: currentUser.root.user.lastOnline*10**3
           }
         }
