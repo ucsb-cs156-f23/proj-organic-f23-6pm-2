@@ -45,7 +45,7 @@
                   },
                   {
                     "column": {
-                      "name": "TERMDESCRIPTION",
+                      "name": "TERM_DESCRIPTION",
                       "type": "VARCHAR(255)"
                     }
                   },

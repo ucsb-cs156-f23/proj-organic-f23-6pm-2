@@ -40,8 +40,9 @@ public class SchoolsController extends ApiController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/all")
     public Iterable<School> schools() {
+        log.info("REACHED HERE!!!");
         Iterable<School> schools = schoolRepository.findAll();
-        log.info("schools={}", schools);
+        log.info("!!!!!={}", schools);
         return schools;
     }
 
