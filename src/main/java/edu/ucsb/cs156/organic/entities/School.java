@@ -14,12 +14,7 @@ public class School {
   private String abbrev;
   private String name;
   private String termRegex;
-  private String termError;
   private String termDescription;
-
-  @Override
-  public String toString() {
-    return String.format("School: abbrev=%s name=%s", abbrev, name);
-  }
+  private String termError;
 }
 

@@ -39,7 +39,7 @@
                   },
                   {
                     "column": {
-                      "name": "TERMREGEX",
+                      "name": "TERM_REGEX",
                       "type": "VARCHAR(255)"
                     }
                   },
@@ -51,7 +51,7 @@
                   },
                   {
                     "column": {
-                      "name": "TERMERROR",
+                      "name": "TERM_ERROR",
                       "type": "VARCHAR(255)"
                     }
                   }]

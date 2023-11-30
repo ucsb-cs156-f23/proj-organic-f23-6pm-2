@@ -42,7 +42,7 @@ public class SchoolsController extends ApiController {
     public Iterable<School> schools() {
         log.info("REACHED HERE!!!");
         Iterable<School> schools = schoolRepository.findAll();
-        log.info("!!!!!={}", schools);
+        log.info("schools={}", schools);
         return schools;
     }
 
@@ -51,7 +51,7 @@ public class SchoolsController extends ApiController {
     @GetMapping("")
     public School getByAbbrev(
         @Parameter(name = "abbrev") @RequestParam String abbrev) {
-        School school = schoolRepository.findById(abbrev)
+        School school = schoolRepository.findByAbbrev(abbrev)
                 .orElseThrow(() -> new EntityNotFoundException(School.class, abbrev));
 
         return school;
@@ -72,6 +72,7 @@ public class SchoolsController extends ApiController {
                 .abbrev(abbrev)
                 .name(name)
                 .termRegex(termRegex)
+                .termDescription(termDescription)
                 .termError(termError)
                 .build();
 
