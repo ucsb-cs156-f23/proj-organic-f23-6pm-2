@@ -17,7 +17,7 @@ describe("CoursesTable tests", () => {
   const queryClient = new QueryClient();
 
   const expectedHeaders = ["id", "Name", "School", "Term", "Start Date (iso format)", "End Date (iso format)", "GitHub Org"];
-  const expectedFields = ["id", "name", "school", "term", "start", "end", "githubOrg"];
+  const expectedFields = ["id", "name", "school", "term", "startDate", "endDate", "githubOrg"];
   const testId = "CoursesTable";
 
   test("renders empty table correctly", () => {
