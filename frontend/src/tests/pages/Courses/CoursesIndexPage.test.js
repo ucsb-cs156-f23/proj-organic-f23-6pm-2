@@ -2,7 +2,7 @@ import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import CoursesIndexPage from "main/pages/Courses/CoursesIndexPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
-import mockConsole from "jest-mock-console";
+// import mockConsole from "jest-mock-console";
 import { coursesFixtures } from "fixtures/coursesFixtures";
 
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
@@ -115,7 +115,7 @@ describe("CoursesIndexPage tests", () => {
         const queryClient = new QueryClient();
         axiosMock.onGet("/api/courses/all").timeout();
 
-        const restoreConsole = mockConsole();
+        // const restoreConsole = mockConsole();
 
         render(
             <QueryClientProvider client={queryClient}>
@@ -201,5 +201,4 @@ describe("CoursesIndexPage tests", () => {
     });
 
 });
-
 
