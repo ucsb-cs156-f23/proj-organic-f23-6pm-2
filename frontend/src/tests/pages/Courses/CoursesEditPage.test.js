@@ -59,7 +59,7 @@ describe("CoursesEditPage tests", () => {
                 </QueryClientProvider>
             );
             await screen.findByText("Edit Courses");
-            expect(screen.queryByTestId("Course-name")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("CoursesForm-name")).not.toBeInTheDocument();
             restoreConsole();
         });
     });
@@ -73,27 +73,36 @@ describe("CoursesEditPage tests", () => {
             axiosMock.resetHistory();
             axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
             axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
-            axiosMock.onGet("/api/courses", { params: { id: 1 } }).reply(200, {
-                id: 1,
+            axiosMock.onGet("/api/courses", { params: { id: 17 } }).reply(200, {
+                id: 17,
                 name: "CS156",
                 school: "UCSB",
                 term: "F23",
-                start: "2023-09-01T00:00:00",
-                end: "2023-12-31T00:00:00",
+                start: "2023-09-01T00:00",
+                end: "2023-12-31T00:00",
                 githubOrg: "ucsb-cs156-f23"
             });
             axiosMock.onPut('/api/courses').reply(200, {
-                id: "1",
+                id: 17,
                 name: "CS148",
                 school: "UCSB",
                 term: "S24",
-                start: "2024-01-01T00:00:00",
-                end: "2024-03-31T00:00:00",
+                start: "2024-01-01T00:00",
+                end: "2024-03-31T00:00",
                 githubOrg: "ucsb-cs148-w24"
             });
         });
 
         const queryClient = new QueryClient();
+        test("renders without crashing", () => {
+            render(
+                <QueryClientProvider client={queryClient}>
+                    <MemoryRouter>
+                        <CoursesEditPage />
+                    </MemoryRouter>
+                </QueryClientProvider>
+            );
+        });
     
         test("Is populated with the data provided", async () => {
 
@@ -117,7 +126,7 @@ describe("CoursesEditPage tests", () => {
             const submitButton = screen.getByTestId("CoursesForm-submit");
 
             expect(idField).toBeInTheDocument();
-            expect(idField).toHaveValue("1");
+            expect(idField).toHaveValue("17");
             expect(nameField).toBeInTheDocument();
             expect(nameField).toHaveValue("CS156");
             expect(schoolField).toBeInTheDocument();
@@ -125,24 +134,25 @@ describe("CoursesEditPage tests", () => {
             expect(termField).toBeInTheDocument();
             expect(termField).toHaveValue("F23");
             expect(startField).toBeInTheDocument();
-            expect(startField).toHaveValue("2023-09-01T00:00:00");
+            expect(startField).toHaveValue("2023-09-01T00:00");
             expect(endField).toBeInTheDocument();
-            expect(endField).toHaveValue("2023-12-31T00:00:00");
+            expect(endField).toHaveValue("2023-12-31T00:00");
             expect(githubOrgField).toBeInTheDocument();
             expect(githubOrgField).toHaveValue("ucsb-cs156-f23");
 
+            expect(submitButton).toBeInTheDocument();
             expect(submitButton).toHaveTextContent("Update");
 
             fireEvent.change(nameField, { target: { value: 'CS148' } });
             fireEvent.change(schoolField, { target: { value: 'UCSB' } });
             fireEvent.change(termField, { target: { value: 'S24' } });
-            fireEvent.change(startField, { target: { value: '2024-01-01T00:00:00' } });
-            fireEvent.change(endField, { target: { value: '2024-03-31T00:00:00' } });
+            fireEvent.change(startField, { target: { value: '2024-01-01T00:00' } });
+            fireEvent.change(endField, { target: { value: '2024-03-31T00:00' } });
             fireEvent.change(githubOrgField, { target: { value: 'ucsb-cs148-w24' } });
             fireEvent.click(submitButton);
 
             await waitFor(() => expect(mockToast).toBeCalled());
-            expect(mockToast).toBeCalledWith("Course Updated - id: 1 name: CS148 school: UCSB term: S24 start: 2024-01-01T00:00:00 end: 2024-03-31T00:00:00 githubOrg: ucsb-cs148-w24");
+            expect(mockToast).toBeCalledWith("Course Updated - id: 17 name: CS148 school: UCSB term: S24 start: 2024-01-01T00:00 end: 2024-03-31T00:00 githubOrg: ucsb-cs148-w24");
             
             expect(mockNavigate).toBeCalledWith({ "to": "/courses" });
 
@@ -152,8 +162,8 @@ describe("CoursesEditPage tests", () => {
                 name: "CS148",
                 school: "UCSB",
                 term: "S24",
-                start: "2024-01-01T00:00:00",
-                end: "2024-03-31T00:00:00",
+                start: "2024-01-01T00:00",
+                end: "2024-03-31T00:00",
                 githubOrg: "ucsb-cs148-w24"
             })); // posted object
 
@@ -182,7 +192,7 @@ describe("CoursesEditPage tests", () => {
             const submitButton = screen.getByTestId("CoursesForm-submit");
 
             expect(idField).toBeInTheDocument();
-            expect(idField).toHaveValue("1");
+            expect(idField).toHaveValue("17");
             expect(nameField).toBeInTheDocument();
             expect(nameField).toHaveValue("CS156");
             expect(schoolField).toBeInTheDocument();
@@ -190,23 +200,23 @@ describe("CoursesEditPage tests", () => {
             expect(termField).toBeInTheDocument();
             expect(termField).toHaveValue("F23");
             expect(startField).toBeInTheDocument();
-            expect(startField).toHaveValue("2023-09-01T00:00:00");
+            expect(startField).toHaveValue("2023-09-01T00:00");
             expect(endField).toBeInTheDocument();
-            expect(endField).toHaveValue("2023-12-31T00:00:00");
+            expect(endField).toHaveValue("2023-12-31T00:00");
             expect(githubOrgField).toBeInTheDocument();
             expect(githubOrgField).toHaveValue("ucsb-cs156-f23");
 
             fireEvent.change(nameField, { target: { value: 'CS148' } });
             fireEvent.change(schoolField, { target: { value: 'UCSB' } });
             fireEvent.change(termField, { target: { value: 'S24' } });
-            fireEvent.change(startField, { target: { value: '2024-01-01T00:00:00' } });
-            fireEvent.change(endField, { target: { value: '2024-03-31T00:00:00' } });
+            fireEvent.change(startField, { target: { value: '2024-01-01T00:00' } });
+            fireEvent.change(endField, { target: { value: '2024-03-31T00:00' } });
             fireEvent.change(githubOrgField, { target: { value: 'ucsb-cs148-w24' } });
 
             fireEvent.click(submitButton);
 
             await waitFor(() => expect(mockToast).toBeCalled());
-            expect(mockToast).toBeCalledWith("Course Updated - id: 1 name: CS148 school: UCSB term: S24 start: 2024-01-01T00:00:00 end: 2024-03-31T00:00:00 githubOrg: ucsb-cs148-w24");
+            expect(mockToast).toBeCalledWith("Course Updated - id: 17 name: CS148 school: UCSB term: S24 start: 2024-01-01T00:00 end: 2024-03-31T00:00 githubOrg: ucsb-cs148-w24");
             expect(mockNavigate).toBeCalledWith({ "to": "/courses" });
         });
 
