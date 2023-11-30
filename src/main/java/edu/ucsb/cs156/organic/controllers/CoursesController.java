@@ -20,6 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,11 +29,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.ucsb.cs156.organic.errors.EntityNotFoundException;
 
-
+import org.springframework.security.access.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 import javax.validation.Valid;
+
+import javax.validation.Valid;
+
+import java.util.Optional;
+
 
 @Tag(name = "Courses")
 @RequestMapping("/api/courses")
@@ -60,6 +66,24 @@ public class CoursesController extends ApiController {
         } else {
             return courseRepository.findCoursesStaffedByUser(u.getGithubId());
         }
+    }
+
+    @Operation(summary= "Get a single course")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @GetMapping("")
+    public Course getById(
+            @Parameter(name="id") @RequestParam Long id) {
+        User u = getCurrentUser().getUser();
+
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Course.class, id));
+        
+        if(!u.isAdmin()){
+                courseStaffRepository.findByCourseIdAndGithubId(id, u.getGithubId())
+                        .orElseThrow(() -> new AccessDeniedException(
+                        String.format("User %s is not authorized to get course %d", u.getGithubLogin(), id)));
+        }
+        return course;
     }
 
     @Operation(summary = "Create a new course")
@@ -189,5 +213,5 @@ public class CoursesController extends ApiController {
         Iterable<Staff> courseStaff = courseStaffRepository.findByCourseId(course.getId());
         return courseStaff;
     }
-
+  
 }
