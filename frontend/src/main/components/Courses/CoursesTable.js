@@ -49,11 +49,11 @@ export default function CoursesTable({
         },
         {
             Header: 'Start Date (iso format)',
-            accessor: 'start',
+            accessor: 'startDate',
         },
         {
             Header: 'End Date (iso format)',
-            accessor: 'end',
+            accessor: 'endDate',
         },
         {
             Header: 'GitHub Org',
