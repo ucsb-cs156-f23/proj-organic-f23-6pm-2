@@ -72,6 +72,68 @@ const apiCurrentUserFixtures = {
             { "authority": "ROLE_ADMIN" },
             { "authority": "SCOPE_profile" }]
     },
+    instructorUser: {
+        "user":
+        {
+            "githubId": 2,
+            "githubNodeId": "instructorNode2",
+            "githubLogin": "instructorUser",
+            "email": "instructorUser@cs.ucsb.edu",
+            "pictureUrl": "https://avatars.githubusercontent.com/u/1119017?v=4",
+            "fullName": "Instructor User",
+            "emailVerified": true,
+            "admin": false,
+            "instructor": true,
+            "accessToken": "instructorToken",
+            "emails": [{
+                "email": "instructorUser@cs.ucsb.edu",
+                "githubId": 2
+            },
+            ],
+            "lastOnline": "2023-11-09T21:06:11.131913Z"
+        },
+        "roles": [
+            { "authority": "SCOPE_email" },
+            {
+                "authority": "ROLE_USER",
+                "attributes": {
+                    "login": "instructorUser",
+                    "id": 2,
+                    "node_id": "instructorNode2",
+                    "avatar_url": "https://avatars.githubusercontent.com/u/1119017?v=4",
+                    "gravatar_id": "",
+                    "url": "https://api.github.com/users/instructorUser",
+                    "html_url": "https://github.com/instructorUser",
+                    "followers_url": "https://api.github.com/users/instructorUser/followers",
+                    "following_url": "https://api.github.com/users/instructorUser/following{/other_user}",
+                    "gists_url": "https://api.github.com/users/instructorUser/gists{/gist_id}",
+                    "starred_url": "https://api.github.com/users/instructorUser/starred{/owner}{/repo}",
+                    "subscriptions_url": "https://api.github.com/users/instructorUser/subscriptions",
+                    "organizations_url": "https://api.github.com/users/instructorUser/orgs",
+                    "repos_url": "https://api.github.com/users/instructorUser/repos",
+                    "events_url": "https://api.github.com/users/instructorUser/events{/privacy}",
+                    "received_events_url": "https://api.github.com/users/instructorUser/received_events",
+                    "type": "User",
+                    "site_admin": false,
+                    "name": "Instructor User",
+                    "company": "UC Santa Barbara",
+                    "blog": "http://www.cs.ucsb.edu/~instructorUser",
+                    "location": "Santa Barbara, CA",
+                    "email": null,
+                    "hireable": null,
+                    "bio": null,
+                    "twitter_username": null,
+                    "public_repos": 267,
+                    "public_gists": 1,
+                    "followers": 81,
+                    "following": 12,
+                    "created_at": "2011-10-11T09:33:28Z",
+                    "updated_at": "2023-11-08T20:14:48Z"
+                }
+            },
+            { "authority": "ROLE_INSTRUCTOR" },
+            { "authority": "SCOPE_profile" }]
+    },
     userOnly: {
         "user":
         {
@@ -146,6 +208,16 @@ const currentUserFixtures = {
             rolesList: [
                 "ROLE_USER",
                 "ROLE_ADMIN"
+            ]
+        },
+    },
+    instructorUser: {
+        loggedIn: true,
+        root: {
+            ...(apiCurrentUserFixtures.instructorUser),
+            rolesList: [
+                "ROLE_USER",
+                "ROLE_INSTRUCTOR"
             ]
         },
     },
