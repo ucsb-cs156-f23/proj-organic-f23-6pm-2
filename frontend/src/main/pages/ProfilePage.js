@@ -1,29 +1,31 @@
 import React from "react";
-import { useCurrentUser } from "main/utils/currentUser";
 import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
 import ReactJson from "react-json-view";
-import UsersTable from "main/components/Users/UsersTable"
+import UsersTable from "main/components/Users/UsersTable";
 import UserEmailsTable from "main/components/Users/UserEmailsTable";
-
+import { useUsers } from "main/utils/users";
+import { useCurrentUser } from "main/utils/currentUser";
 const ProfilePage = () => {
 
+    const { data: currUser } = useUsers();
     const { data: currentUser } = useCurrentUser();
 
+    // Check if the user is not logged in
     if (!currentUser.loggedIn) {
         return (
             <p>Not logged in.</p>
         )
     }
-    const displayUser = {
-        ...currentUser,
-        root: {
-          ...currentUser.root,
-          user: {
-            ...currentUser.root.user,
-            lastOnline: currentUser.root.user.lastOnline*10**3
-          }
-        }
-      };
+
+    // Find the user in currUser array with matching githubId
+    const foundUser = currUser.find(user => user.githubId === currentUser.root.user.githubId);
+
+    // If a user with matching githubId is found, update displayUser's lastOnline
+    const displayUser = { ...currentUser };
+    if (foundUser) {
+        displayUser.root.user.lastOnline = foundUser.lastOnline;
+    }
+
 
     return (
         <BasicLayout>
