@@ -181,6 +181,7 @@ public class CoursesControllerTests extends ControllerTestCase {
                 assertEquals(expectedJson, responseString);
         }
 
+
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
         public void an_admin_user_can_add_a_staff_member_to_a_course() throws Exception {
@@ -419,8 +420,7 @@ public class CoursesControllerTests extends ControllerTestCase {
                         .andExpect(status().isForbidden());
                 
                 // assert
-                verify(courseRepository, times(1)).findById(eq(1L));
-                        
+                verify(courseRepository, times(1)).findById(eq(1L));         
         }
 
 
