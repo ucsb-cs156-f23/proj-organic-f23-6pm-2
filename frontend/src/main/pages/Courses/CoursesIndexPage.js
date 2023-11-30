@@ -8,7 +8,7 @@ import { Button } from 'react-bootstrap';
 
 export default function CoursesIndexPage() {
 
-    const currentUser = useCurrentUser();
+    const { data: currentUser } = useCurrentUser();
 
     const { data: courses, error: _error, status: _status } =
         useBackend(
@@ -20,7 +20,7 @@ export default function CoursesIndexPage() {
         );
 
     const createButton = () => {
-        if (hasRole(currentUser, "ROLE_ADMIN")) {
+        if (hasRole(currentUser, "ROLE_ADMIN") || hasRole(currentUser, "ROLE_INSTRUCTOR")) {
             return (
                 <Button
                     variant="primary"
