@@ -25,7 +25,7 @@ Default.parameters = {
         rest.get('/api/courses', (_req, res, ctx) => {
             return res(ctx.json(coursesFixtures.threeCourses[0]));
         }),
-        rest.put('/api/courses/update', async (req, res, ctx) => {
+        rest.put('/api/courses', async (req, res, ctx) => {
             var reqBody = await req.text();
             window.alert("PUT: " + req.url + " and body: " + reqBody);
             return res(ctx.status(200),ctx.json({}));
