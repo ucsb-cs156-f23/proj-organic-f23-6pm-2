@@ -5,6 +5,9 @@ import HomePage from "main/pages/HomePage";
 import LoadingPage from "main/pages/LoadingPage";
 import LoginPage from "main/pages/LoginPage";
 import ProfilePage from "main/pages/ProfilePage";
+import CoursesIndexPage from "main/pages/Courses/CoursesIndexPage";
+import CoursesCreatePage from "main/pages/Courses/CoursesCreatePage";
+import CoursesEditPage from "main/pages/Courses/CoursesEditPage";
 
 import AdminUsersPage from "main/pages/AdminUsersPage";
 import AdminJobsPage from "main/pages/AdminJobsPage";
@@ -66,6 +69,15 @@ function App() {
           {homeRoute}
           {adminRoutes}
           {userRoutes}
+          {
+            (hasRole(currentUser, "ROLE_ADMIN") || hasRole(currentUser, "ROLE_INSTRUCTOR")) && (
+              <>
+                <Route exact path="/courses" element={<CoursesIndexPage />} />
+                <Route exact path="/courses/edit/:id" element={<CoursesEditPage />} />
+                <Route exact path="/courses/create" element={<CoursesCreatePage />} />
+              </>
+            )
+          }
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       )}
