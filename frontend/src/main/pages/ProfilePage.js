@@ -20,7 +20,7 @@ const ProfilePage = () => {
             <h1 className={"mb-3"}>
                 User Profile for {currentUser.root.user.githubLogin}
             </h1>
-            <UsersTable users={[currentUser.root.user]} />
+            <UsersTable users={[currentUser.root.user]}/>
             <h2 className={"mt-3 mb-3"}>
                 Emails
             </h2>
