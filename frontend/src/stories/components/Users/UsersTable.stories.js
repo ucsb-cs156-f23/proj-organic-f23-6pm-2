@@ -23,12 +23,12 @@ Empty.args = {
 export const NoButton = Template.bind({});
 
 NoButton.args = {
-    users: usersFixtures.threeUsers
+    users: usersFixtures.threeUsers,
+    showToggleButtons: false
 };
 
 export const WithButton = Template.bind({});
 
 WithButton.args = {
-    users: usersFixtures.threeUsers,
-    showToggleButtons: true
+    users: usersFixtures.threeUsers
 };
