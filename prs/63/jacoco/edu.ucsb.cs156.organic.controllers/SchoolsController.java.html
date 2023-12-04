@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SchoolsController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">organic</a> &gt; <a href="index.source.html" class="el_package">edu.ucsb.cs156.organic.controllers</a> &gt; <span class="el_source">SchoolsController.java</span></div><h1>SchoolsController.java</h1><pre class="source lang-java linenums">package edu.ucsb.cs156.organic.controllers;
+
+import edu.ucsb.cs156.organic.entities.School;
+import edu.ucsb.cs156.organic.errors.EntityNotFoundException;
+import edu.ucsb.cs156.organic.repositories.SchoolRepository;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+
+@Tag(name = &quot;Schools&quot;)
+@RequestMapping(&quot;/api/schools&quot;)
+@RestController
+<span class="fc" id="L32">@Slf4j</span>
+<span class="fc" id="L33">public class SchoolsController extends ApiController {</span>
+
+    @Autowired
+    SchoolRepository schoolRepository;
+
+    @Autowired
+    ObjectMapper mapper;
+
+    @Operation(summary = &quot;List all schools&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @GetMapping(&quot;/all&quot;)
+    public Iterable&lt;School&gt; schools() {
+<span class="fc" id="L45">        log.info(&quot;REACHED HERE!!!&quot;);</span>
+<span class="fc" id="L46">        Iterable&lt;School&gt; schools = schoolRepository.findAll();</span>
+<span class="fc" id="L47">        log.info(&quot;schools={}&quot;, schools);</span>
+<span class="fc" id="L48">        return schools;</span>
+    }
+
+    @Operation(summary = &quot;Get a single school&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @GetMapping(&quot;&quot;)
+    public School getByAbbrev(
+        @Parameter(name = &quot;abbrev&quot;) @RequestParam String abbrev) {
+<span class="fc" id="L56">        School school = schoolRepository.findByAbbrev(abbrev)</span>
+<span class="fc" id="L57">                .orElseThrow(() -&gt; new EntityNotFoundException(School.class, abbrev));</span>
+
+<span class="fc" id="L59">        return school;</span>
+    }
+
+    @Operation(summary = &quot;Create a new school&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @PostMapping(&quot;/post&quot;)
+    public School postSchool(
+            @Parameter(name = &quot;abbrev&quot;, description =&quot;school abbrevation, e.g. ucsb&quot; ) @RequestParam String abbrev,
+            @Parameter(name = &quot;name&quot;, description =&quot;school name e.g. UC Santa Barbara&quot; ) @RequestParam String name,
+            @Parameter(name = &quot;termRegex&quot;, description = &quot;term regex, e.g. [WSMF]\\d\\d&quot;) @RequestParam String termRegex,
+            @Parameter(name = &quot;termDescription&quot;, description = &quot;Enter quarter, e.g. F23, W24, S24, M24&quot;) @RequestParam String termDescription,
+            @Parameter(name = &quot;termError&quot;, description = &quot;term error, e.g. Quarter must be entered in the correct format&quot;) @RequestParam String termError)
+            throws JsonProcessingException {
+
+<span class="fc" id="L73">        School school = School.builder()</span>
+<span class="fc" id="L74">                .abbrev(abbrev)</span>
+<span class="fc" id="L75">                .name(name)</span>
+<span class="fc" id="L76">                .termRegex(termRegex)</span>
+<span class="fc" id="L77">                .termDescription(termDescription)</span>
+<span class="fc" id="L78">                .termError(termError)</span>
+<span class="fc" id="L79">                .build();</span>
+
+<span class="fc" id="L81">        School savedSchool = schoolRepository.save(school);</span>
+
+<span class="fc" id="L83">        return savedSchool;</span>
+    }
+
+    @Operation(summary = &quot;Update a school&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @PutMapping(&quot;/update&quot;)
+    public School updateSchool(
+            @Parameter(name = &quot;abbrev&quot;, description =&quot;school abbrevation, e.g. ucsb&quot; ) 
+            @RequestParam String abbrev,
+            @RequestBody @Valid School incoming) {
+
+<span class="fc" id="L94">        School school = schoolRepository.findByAbbrev(abbrev)</span>
+<span class="fc" id="L95">                .orElseThrow(() -&gt; new EntityNotFoundException(School.class, abbrev));</span>
+        
+<span class="fc" id="L97">        school.setName(incoming.getName());</span>
+<span class="fc" id="L98">        school.setTermRegex(incoming.getTermRegex());</span>
+<span class="fc" id="L99">        school.setTermDescription(incoming.getTermDescription());</span>
+<span class="fc" id="L100">        school.setTermError(incoming.getTermError());</span>
+
+<span class="fc" id="L102">        schoolRepository.save(school);</span>
+
+<span class="fc" id="L104">        return school;</span>
+    }
+
+    @Operation(summary = &quot;Delete a school&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @DeleteMapping(&quot;/delete&quot;)
+    public Object deleteSchool(
+            @Parameter(name = &quot;abbrev&quot;, description =&quot;school abbrevation, e.g. ucsb&quot; ) 
+            @RequestParam String abbrev) 
+            throws JsonProcessingException {
+
+<span class="fc" id="L115">        School school = schoolRepository.findByAbbrev(abbrev)</span>
+<span class="fc" id="L116">                .orElseThrow(() -&gt; new EntityNotFoundException(School.class, abbrev));</span>
+        
+<span class="fc" id="L118">        schoolRepository.delete(school);</span>
+
+<span class="fc" id="L120">        return genericMessage(&quot;School with abbrev %s deleted.&quot;.formatted(abbrev));</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
