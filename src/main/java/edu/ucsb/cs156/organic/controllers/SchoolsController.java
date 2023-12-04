@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @Tag(name = "Schools")
 @RequestMapping("/api/schools")
 @RestController
@@ -79,6 +81,43 @@ public class SchoolsController extends ApiController {
         School savedSchool = schoolRepository.save(school);
 
         return savedSchool;
+    }
+
+    @Operation(summary = "Update a school")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/update")
+    public School updateSchool(
+            @Parameter(name = "abbrev", description ="school abbrevation, e.g. ucsb" ) 
+            @RequestParam String abbrev,
+            @RequestBody @Valid School incoming) {
+
+        School school = schoolRepository.findByAbbrev(abbrev)
+                .orElseThrow(() -> new EntityNotFoundException(School.class, abbrev));
+        
+        school.setName(incoming.getName());
+        school.setTermRegex(incoming.getTermRegex());
+        school.setTermDescription(incoming.getTermDescription());
+        school.setTermError(incoming.getTermError());
+
+        schoolRepository.save(school);
+
+        return school;
+    }
+
+    @Operation(summary = "Delete a school")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/delete")
+    public Object deleteSchool(
+            @Parameter(name = "abbrev", description ="school abbrevation, e.g. ucsb" ) 
+            @RequestParam String abbrev) 
+            throws JsonProcessingException {
+
+        School school = schoolRepository.findByAbbrev(abbrev)
+                .orElseThrow(() -> new EntityNotFoundException(School.class, abbrev));
+        
+        schoolRepository.delete(school);
+
+        return genericMessage("School with abbrev %s deleted.".formatted(abbrev));
     }
 
 }
