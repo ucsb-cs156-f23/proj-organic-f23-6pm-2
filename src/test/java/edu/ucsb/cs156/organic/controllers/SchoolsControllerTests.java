@@ -26,6 +26,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+
+import org.springframework.http.MediaType;
+
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -146,5 +149,111 @@ public class SchoolsControllerTests extends ControllerTestCase {
                 String expectedJson = mapper.writeValueAsString(school1);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
+        }
+
+        @WithMockUser(roles = { "ADMIN" })
+        @Test
+        public void an_admin_user_can_update_a_school() throws Exception {
+                // arrange
+
+                School school1Edited = School.builder()
+                                        .abbrev("ucsb")
+                                        .name("UCSB")
+                                        .termRegex("[FWSM]\\d\\d")
+                                        .termDescription("S23")
+                                        .termError("errors")
+                                        .build();
+
+                String requestBody = mapper.writeValueAsString(school1Edited);
+
+                when(schoolRepository.findByAbbrev(eq(school1.getAbbrev()))).thenReturn(Optional.of(school1));
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                put("/api/schools/update?abbrev=ucsb")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .characterEncoding("utf-8")
+                                .content(requestBody)
+                                        .with(csrf()))
+                                .andExpect(status().isOk()).andReturn();
+
+                // assert
+                verify(schoolRepository, times(1)).findByAbbrev(school1.getAbbrev());
+                verify(schoolRepository, times(1)).save(school1Edited);
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(requestBody, responseString);
+        }
+
+        @WithMockUser(roles = { "ADMIN" })
+        @Test
+        public void an_admin_user_cannot_update_a_nonexistent_school() throws Exception {
+                // arrange
+
+                School school1Edited = School.builder()
+                                        .abbrev("ucsb")
+                                        .name("UCSB")
+                                        .termRegex("[FWSM]\\d\\d")
+                                        .termDescription("S23")
+                                        .termError("errors")
+                                        .build();
+
+                String requestBody = mapper.writeValueAsString(school1Edited);
+
+                when(schoolRepository.findByAbbrev(eq(school1.getAbbrev()))).thenReturn(Optional.empty());
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                put("/api/schools/update?abbrev=ucsb")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .characterEncoding("utf-8")
+                                .content(requestBody)
+                                        .with(csrf()))
+                                .andExpect(status().isNotFound()).andReturn();
+
+                // assert
+                verify(schoolRepository, atLeastOnce()).findByAbbrev(eq(school1.getAbbrev()));
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("EntityNotFoundException", json.get("type"));
+                assertEquals("School with id ucsb not found", json.get("message"));
+        }
+
+        @WithMockUser(roles = { "ADMIN" })
+        @Test
+        public void an_admin_user_can_delete_a_school() throws Exception {
+                // arrange
+
+                when(schoolRepository.findByAbbrev(eq(school1.getAbbrev()))).thenReturn(Optional.of(school1));
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                delete("/api/schools/delete?abbrev=ucsb")
+                                        .with(csrf()))
+                                .andExpect(status().isOk()).andReturn();
+
+                // assert
+                verify(schoolRepository, times(1)).findByAbbrev(eq(school1.getAbbrev()));
+                verify(schoolRepository, times(1)).delete(school1);
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("School with abbrev ucsb deleted.", json.get("message"));
+        }
+
+        @WithMockUser(roles = { "ADMIN" })
+        @Test
+        public void an_admin_user_cannot_delete_a_nonexistent_school() throws Exception {
+                // arrange
+
+                when(schoolRepository.findByAbbrev(eq(school1.getAbbrev()))).thenReturn(Optional.empty());
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                delete("/api/schools/delete?abbrev=ucsb")
+                                        .with(csrf()))
+                                .andExpect(status().isNotFound()).andReturn();
+
+                // assert
+                verify(schoolRepository, atLeastOnce()).findByAbbrev(eq(school1.getAbbrev()));
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("EntityNotFoundException", json.get("type"));
+                assertEquals("School with id ucsb not found", json.get("message"));
         }
 }
