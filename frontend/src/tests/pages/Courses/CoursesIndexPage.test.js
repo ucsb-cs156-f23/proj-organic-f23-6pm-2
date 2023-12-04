@@ -2,7 +2,6 @@ import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import CoursesIndexPage from "main/pages/Courses/CoursesIndexPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
-// import mockConsole from "jest-mock-console";
 import { coursesFixtures } from "fixtures/coursesFixtures";
 
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
@@ -115,8 +114,6 @@ describe("CoursesIndexPage tests", () => {
         const queryClient = new QueryClient();
         axiosMock.onGet("/api/courses/all").timeout();
 
-        // const restoreConsole = mockConsole();
-
         render(
             <QueryClientProvider client={queryClient}>
                 <MemoryRouter>
@@ -126,10 +123,6 @@ describe("CoursesIndexPage tests", () => {
         );
 
         await waitFor(() => { expect(axiosMock.history.get.length).toBeGreaterThanOrEqual(1); });
-        
-        // const errorMessage = console.error.mock.calls[0][0];
-        // expect(errorMessage).toMatch("Error communicating with backend via GET on /api/courses/all");
-        // restoreConsole();
 
         expect(screen.queryByTestId(`${testId}-cell-row-0-col-id`)).not.toBeInTheDocument();
     });

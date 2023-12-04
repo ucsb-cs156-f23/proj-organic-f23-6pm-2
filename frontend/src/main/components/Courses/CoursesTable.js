@@ -61,7 +61,6 @@ export default function CoursesTable({
         }
     ];
     
-    // console.log(hasRole(currentUser, "ROLE_ADMIN"));
     if (hasRole(currentUser, "ROLE_ADMIN") || hasRole(currentUser, "ROLE_INSTRUCTOR")) {
         columns.push(ButtonColumn("Edit", "primary", editCallback, testIdPrefix));
         columns.push(ButtonColumn("Delete", "danger", deleteCallback, testIdPrefix));
