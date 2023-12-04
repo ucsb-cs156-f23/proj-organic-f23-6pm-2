@@ -216,7 +216,8 @@ public class JobsControllerTests extends ControllerTestCase {
                 Job jobReturned = objectMapper.readValue(responseString, Job.class);
 
                 assertEquals("running", jobReturned.getStatus());
-                await().atMost(10, SECONDS)
+
+                await().atMost(6, SECONDS)
                 .untilAsserted(() -> {
                         verify(jobsRepository, atLeast(1)).save(jobCaptor.capture());                        
                         List<Job> values = jobCaptor.getAllValues();

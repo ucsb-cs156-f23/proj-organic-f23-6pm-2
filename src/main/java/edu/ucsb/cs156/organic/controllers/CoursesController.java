@@ -9,7 +9,6 @@ import edu.ucsb.cs156.organic.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import liquibase.pro.packaged.o;
 import lombok.extern.slf4j.Slf4j;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -41,11 +40,6 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 
-import javax.transaction.Transactional;
-import javax.validation.Valid;
-
-import java.util.Optional;
-
 @Tag(name = "Courses")
 @RequestMapping("/api/courses")
 @RestController
@@ -74,8 +68,26 @@ public class CoursesController extends ApiController {
         }
     }
 
+    @Operation(summary= "Get a single course")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @GetMapping("")
+    public Course getById(
+            @Parameter(name="id") @RequestParam Long id) {
+        User u = getCurrentUser().getUser();
+
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Course.class, id));
+        
+        if(!u.isAdmin()){
+                courseStaffRepository.findByCourseIdAndGithubId(id, u.getGithubId())
+                        .orElseThrow(() -> new AccessDeniedException(
+                        String.format("User %s is not authorized to get course %d", u.getGithubLogin(), id)));
+        }
+        return course;
+    }
+
     @Operation(summary = "Create a new course")
-    @PreAuthorize("hasRole('ROLE_ADMIN', 'ROLE_INSTRUCTOR')")
+    @PreAuthorize("hasAnyRole('ROLE_INSTRUCTOR', 'ROLE_ADMIN')")
     @PostMapping("/post")
     public Course postCourse(
             @Parameter(name = "name", description ="course name, e.g. CMPSC 156" ) @RequestParam String name,
@@ -201,24 +213,5 @@ public class CoursesController extends ApiController {
         Iterable<Staff> courseStaff = courseStaffRepository.findByCourseId(course.getId());
         return courseStaff;
     }
-
-    //  There is a GET endpoint /api/course/get?id=123 that gets the course with id 123 if you are an admin, or if you are logged in and on the course staff.
-    @Operation(summary= "Get a single course by id")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-    @GetMapping("")
-    public Course getById(
-            @Parameter(name="id") @RequestParam Long id) {
-        User u = getCurrentUser().getUser();
-
-        Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Course.class, id));
-        
-        if(!u.isAdmin()){
-                courseStaffRepository.findByCourseIdAndGithubId(id, u.getGithubId())
-                        .orElseThrow(() -> new AccessDeniedException(
-                String.format("User %s is not authorized to get course %d", u.getGithubLogin(), id)));
-        }
-
-        return course;
-    }
+  
 }
