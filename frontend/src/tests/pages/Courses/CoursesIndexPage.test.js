@@ -131,7 +131,7 @@ describe("CoursesIndexPage tests", () => {
         setupAdminUser();
         const queryClient = new QueryClient();
         axiosMock.onGet("/api/courses/all").reply(200, coursesFixtures.threeCourses);
-        axiosMock.onDelete("/api/courses").reply(200, "Course with id 1 was deleted");
+        axiosMock.onDelete("/api/courses/delete").reply(200, "Course with id 1 was deleted");
 
 
         render(
@@ -155,8 +155,8 @@ describe("CoursesIndexPage tests", () => {
         await waitFor(() => { expect(mockToast).toBeCalledWith("Course with id 1 was deleted") });
 
         await waitFor(() => { expect(axiosMock.history.delete.length).toBe(1); });
-        expect(axiosMock.history.delete[0].url).toBe("/api/courses");
-        expect(axiosMock.history.delete[0].url).toBe("/api/courses");
+        expect(axiosMock.history.delete[0].url).toBe("/api/courses/delete");
+        expect(axiosMock.history.delete[0].url).toBe("/api/courses/delete");
         expect(axiosMock.history.delete[0].params).toEqual({ id: 2 });
     });
 
@@ -164,7 +164,7 @@ describe("CoursesIndexPage tests", () => {
         setupInstructorUser();
         const queryClient = new QueryClient();
         axiosMock.onGet("/api/courses/all").reply(200, coursesFixtures.threeCourses);
-        axiosMock.onDelete("/api/courses").reply(200, "Course with id 1 was deleted");
+        axiosMock.onDelete("/api/courses/delete").reply(200, "Course with id 1 was deleted");
 
 
         render(
@@ -188,8 +188,8 @@ describe("CoursesIndexPage tests", () => {
         await waitFor(() => { expect(mockToast).toBeCalledWith("Course with id 1 was deleted") });
 
         await waitFor(() => { expect(axiosMock.history.delete.length).toBe(1); });
-        expect(axiosMock.history.delete[0].url).toBe("/api/courses");
-        expect(axiosMock.history.delete[0].url).toBe("/api/courses");
+        expect(axiosMock.history.delete[0].url).toBe("/api/courses/delete");
+        expect(axiosMock.history.delete[0].url).toBe("/api/courses/delete");
         expect(axiosMock.history.delete[0].params).toEqual({ id: 2 });
     });
 
