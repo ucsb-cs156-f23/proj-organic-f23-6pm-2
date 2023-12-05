@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-f23/proj-organic-f23-6pm-2
 owner: ucsb-cs156-f23
 repo_name: proj-organic-f23-6pm-2
-pull_requests: [{"author":{"id":"MDQ6VXNlcjcyODM5MjIz","is_bot":false,"login":"whuang602","name":"Will H."},"headRefName":"FixInterceptorPackageName","number":71,"title":"Changed interceptors package and import to lowercase","url":"https://github.com/ucsb-cs156-f23/proj-organic-f23-6pm-2/pull/71"}]
+pull_requests: []
