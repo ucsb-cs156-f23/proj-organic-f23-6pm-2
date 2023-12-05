@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-f23/proj-organic-f23-6pm-2
 owner: ucsb-cs156-f23
 repo_name: proj-organic-f23-6pm-2
-pull_requests: [{"author":{"id":"MDQ6VXNlcjY4NzUyNjY1","is_bot":false,"login":"ZhenyuYu1","name":"Zhenyu Yu"},"headRefName":"fix-frontend-delete-error","number":72,"title":"Fixed bug with using wrong endpoint url for delete operation","url":"https://github.com/ucsb-cs156-f23/proj-organic-f23-6pm-2/pull/72"}]
+pull_requests: []
